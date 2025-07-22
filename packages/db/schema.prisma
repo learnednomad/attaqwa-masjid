@@ -1,0 +1,253 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "./src/generated"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(cuid())
+  email      String   @unique
+  password   String   // Hashed password
+  name       String
+  role       Role     @default(USER)
+  ageTier    AgeTier?
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Relations
+  announcements Announcement[]
+  progress      UserProgress[]
+  sessions      AdminSession[]
+
+  @@map("users")
+}
+
+model AdminSession {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token     String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@map("admin_sessions")
+}
+
+model Announcement {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Markdown content
+  imageUrl    String?
+  imageAlt    String?
+  pdfUrl      String?
+  isEvent     Boolean  @default(false)
+  eventDate   DateTime?
+  isActive    Boolean  @default(true)
+  isArchived  Boolean  @default(false)
+  authorId    String
+  author      User     @relation(fields: [authorId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("announcements")
+}
+
+model Event {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  date        DateTime
+  startTime   String?
+  endTime     String?
+  location    String?
+  isIndoor    Boolean  @default(false)
+  isOutdoor   Boolean  @default(false)
+  imageUrl    String?
+  imageAlt    String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("events")
+}
+
+model PrayerSchedule {
+  id        String   @id @default(cuid())
+  date      DateTime @unique
+  location  String   @default("Masjid At-Taqwa")
+  fajr      String
+  sunrise   String
+  dhuhr     String
+  asr       String
+  maghrib   String
+  isha      String
+  qibla     Float    @default(58.5)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("prayer_schedules")
+}
+
+model Calendar {
+  id          String   @id @default(cuid())
+  title       String
+  description String?
+  fileUrl     String
+  fileName    String
+  fileSize    Int
+  year        Int
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("calendars")
+}
+
+model Donation {
+  id            String        @id @default(cuid())
+  amount        Float
+  currency      String        @default("CAD")
+  type          DonationType
+  donorName     String?
+  email         String?
+  isAnonymous   Boolean       @default(false)
+  paymentStatus PaymentStatus @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@map("donations")
+}
+
+model BlogPost {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Markdown content
+  excerpt     String
+  author      String
+  publishedAt DateTime?
+  isPublished Boolean  @default(false)
+  tags        String[]
+  imageUrl    String?
+  imageAlt    String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("blog_posts")
+}
+
+// Educational Content Models
+model ContentModule {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  category    Category
+  ageTier     AgeTier
+  isActive    Boolean    @default(true)
+  sortOrder   Int        @default(0)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  // Relations
+  lessons  Lesson[]
+  versions ContentVersion[]
+
+  @@map("content_modules")
+}
+
+model ContentVersion {
+  id          String        @id @default(cuid())
+  moduleId    String
+  module      ContentModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  version     Int
+  content     Json
+  publishedAt DateTime?
+  createdAt   DateTime      @default(now())
+
+  @@unique([moduleId, version])
+  @@map("content_versions")
+}
+
+model Lesson {
+  id          String   @id @default(cuid())
+  title       String
+  content     String   // Story/Verse content in Markdown
+  moduleId    String
+  module      ContentModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  questions Question[]
+  progress  UserProgress[]
+
+  @@map("lessons")
+}
+
+model Question {
+  id           String @id @default(cuid())
+  lessonId     String
+  lesson       Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  questionText String
+  options      Json   // Expected format: { options: [{ text: string, isCorrect: boolean }] }
+  explanation  String
+  sortOrder    Int    @default(0)
+
+  @@map("questions")
+}
+
+model UserProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  score     Int
+  completed Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, lessonId])
+  @@map("user_progress")
+}
+
+// Enums
+enum Role {
+  ADMIN
+  USER
+}
+
+enum AgeTier {
+  PRIMARY      // 7-9
+  INTERMEDIATE // 10-14
+  HIGHER       // 14-18
+}
+
+enum Category {
+  TAFSIR
+  SIRA
+  CHARACTER_BUILDING
+  PRAYER
+  QURAN
+}
+
+enum DonationType {
+  ZAKAT
+  SADAQAH
+  GENERAL
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
