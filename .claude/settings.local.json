@@ -5,7 +5,21 @@
       "Bash(npx shadcn@latest init:*)",
       "Bash(mkdir:*)",
       "Bash(npx shadcn@latest add:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(npm run:*)",
+      "mcp__coolify__databases",
+      "Bash(npx prisma db seed:*)",
+      "Bash(timeout 10s npm run dev)",
+      "Bash(node:*)",
+      "Bash(docker exec:*)",
+      "Bash(find:*)",
+      "Bash(npx tsc:*)",
+      "mcp__filesystem__create_directory",
+      "Bash(rm:*)",
+      "mcp__puppeteer__puppeteer_screenshot",
+      "mcp__puppeteer__puppeteer_navigate",
+      "mcp__puppeteer__puppeteer_click",
+      "mcp__puppeteer__puppeteer_evaluate"
     ],
     "deny": []
   }

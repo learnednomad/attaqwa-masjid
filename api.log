@@ -1,0 +1,99 @@
+
+> @attaqwa/api@0.1.0 dev
+> tsx watch src/index.ts
+
+/Users/saninabil/WebstormProjects/attaqwa-masjid/node_modules/.prisma/client/default.js:43
+    throw new Error('@prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.');
+          ^
+
+Error: @prisma/client did not initialize yet. Please run "prisma generate" and try to import it again.
+    at new PrismaClient (/Users/saninabil/WebstormProjects/attaqwa-masjid/node_modules/.prisma/client/default.js:43:11)
+    at <anonymous> (/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api/src/routes/education.ts:24:16)
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.17.0
+11:54:11 PM [tsx] change in ./src/routes/education.ts Rerunning...
+c/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api/src/routes/education.ts:24
+const prisma = new PrismaClient();
+               ^
+
+
+ReferenceError: PrismaClient is not defined
+    at <anonymous> (/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api/src/routes/education.ts:24:16)
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.17.0
+11:54:24 PM [tsx] change in ./src/routes/education.ts Rerunning...
+c/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api/src/routes/education.ts:4
+import { prisma } from '@attaqwa/db';
+         ^
+
+SyntaxError: The requested module '@attaqwa/db' does not provide an export named 'prisma'
+    at ModuleJob._instantiate (node:internal/modules/esm/module_job:220:21)
+    at async ModuleJob.run (node:internal/modules/esm/module_job:321:5)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.17.0
+11:54:44 PM [tsx] change in ./src/routes/education.ts Rerunning...
+c🚀 API Server running at http://localhost:3001
+11:54:53 PM [tsx] change in ./src/routes/education.ts Restarting...
+c🚀 API Server running at http://localhost:3001
+node:events:496
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1940:16)
+    at listenInCluster (node:net:1997:12)
+    at Server.listen (node:net:2102:7)
+    at serve (file:///Users/saninabil/WebstormProjects/attaqwa-masjid/node_modules/@hono/node-server/dist/index.mjs:529:10)
+    at <anonymous> (/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api/src/index.ts:67:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+Node.js v22.17.0
+npm error Lifecycle script `dev` failed with error:
+npm error code 15
+npm error path /Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api
+npm error workspace @attaqwa/api@0.1.0
+npm error location /Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api
+npm error command failed
+npm error command sh -c tsx watch src/index.ts
+/node_modules/@hono/node-server/dist/index.mjs:529:10)
+    at <anonymous> (/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api/src/index.ts:67:1)
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+Emitted 'error' event on Server instance at:
+    at emitErrorNT (node:net:1976:8)
+    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) {
+  code: 'EADDRINUSE',
+  errno: -48,
+  syscall: 'listen',
+  address: '::',
+  port: 3001
+}
+
+Node.js v22.17.0
+npm error Lifecycle script `dev` failed with error:
+npm error code 15
+npm error path /Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api
+npm error workspace @attaqwa/api@0.1.0
+npm error location /Users/saninabil/WebstormProjects/attaqwa-masjid/packages/api
+npm error command failed
+npm error command sh -c tsx watch src/index.ts

@@ -1,0 +1,320 @@
+
+> @attaqwa/web@0.1.0 dev
+> next dev --turbopack
+
+ ⚠ Warning: Found multiple lockfiles. Selecting /Users/saninabil/pnpm-lock.yaml.
+   Consider removing the lockfiles at:
+   * /Users/saninabil/WebstormProjects/attaqwa-masjid/package-lock.json
+
+   ▲ Next.js 15.4.2 (Turbopack)
+   - Local:        http://localhost:3000
+   - Network:      http://10.20.11.2:3000
+   - Environments: .env.local
+
+ ✓ Starting...
+ ✓ Ready in 929ms
+ ○ Compiling / ...
+ ✓ Compiled / in 1563ms
+ GET / 200 in 1861ms
+ ✓ Compiled /favicon.ico in 102ms
+ GET /favicon.ico?favicon.45db1c09.ico 200 in 347ms
+ ✓ Compiled /_not-found/page in 206ms
+ GET /prayer-times 404 in 246ms
+ GET /prayer-times 404 in 73ms
+ GET / 200 in 96ms
+ GET /events 404 in 32ms
+ GET /events 404 in 64ms
+ ✓ Compiled /admin in 345ms
+ ⨯ ./packages/web/src/app/admin/page.tsx:5:1
+Export useTodayPrayerTimes doesn't exist in target module
+[0m [90m 3 |[39m [36mimport[39m { useAnnouncements } [36mfrom[39m [32m'@/lib/hooks/useAnnouncements'[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useEvents } [36mfrom[39m [32m'@/lib/hooks/useEvents'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { useTodayPrayerTimes } [36mfrom[39m [32m'@/lib/hooks/usePrayerTimes'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [0m
+
+The export useTodayPrayerTimes was not found in module [project]/packages/web/src/lib/hooks/usePrayerTimes.ts [app-client] (ecmascript).
+Did you mean to import usePrayerTimes?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./packages/web/src/app/admin/page.tsx [Client Component Browser]
+    ./packages/web/src/app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/web/src/app/admin/page.tsx [Client Component SSR]
+    ./packages/web/src/app/admin/page.tsx [Server Component]
+
+
+
+./packages/web/src/app/admin/page.tsx:5:1
+Export useTodayPrayerTimes doesn't exist in target module
+[0m [90m 3 |[39m [36mimport[39m { useAnnouncements } [36mfrom[39m [32m'@/lib/hooks/useAnnouncements'[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m { useEvents } [36mfrom[39m [32m'@/lib/hooks/useEvents'[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { useTodayPrayerTimes } [36mfrom[39m [32m'@/lib/hooks/usePrayerTimes'[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { [33mCard[39m[33m,[39m [33mCardContent[39m[33m,[39m [33mCardHeader[39m[33m,[39m [33mCardTitle[39m } [36mfrom[39m [32m'@/components/ui/card'[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m'@/components/ui/button'[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [0m
+
+The export useTodayPrayerTimes was not found in module [project]/packages/web/src/lib/hooks/usePrayerTimes.ts [app-ssr] (ecmascript).
+Did you mean to import usePrayerTimes?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./packages/web/src/app/admin/page.tsx [Client Component Browser]
+    ./packages/web/src/app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./packages/web/src/app/admin/page.tsx [Client Component SSR]
+    ./packages/web/src/app/admin/page.tsx [Server Component]
+
+
+ ○ Compiling /_error ...
+ ✓ Compiled /_error in 501ms
+ GET /admin 500 in 976ms
+ GET /favicon.ico 500 in 18ms
+ GET / 200 in 120ms
+ GET / 200 in 92ms
+ ✓ Compiled in 68ms
+ GET / 200 in 74ms
+ ✓ Compiled /admin in 86ms
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/favicon.ico/[__metadata_id__]/route/app-paths-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/app/admin/page/app-build-manifest.json'
+}
+ ⨯ [Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[Error: ENOENT: no such file or directory, open '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'] {
+  errno: -2,
+  code: 'ENOENT',
+  syscall: 'open',
+  path: '/Users/saninabil/WebstormProjects/attaqwa-masjid/packages/web/.next/server/pages/_app/build-manifest.json'
+}
+[?25h

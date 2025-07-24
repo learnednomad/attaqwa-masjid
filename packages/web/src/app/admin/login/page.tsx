@@ -34,10 +34,13 @@ export default function AdminLoginPage() {
       await login(email, password);
       router.push('/admin');
     } catch (error) {
+      console.error('Login error details:', error);
       if (error instanceof ApiError) {
         setError(error.message);
+      } else if (error instanceof Error) {
+        setError(`Error: ${error.message}`);
       } else {
-        setError('An unexpected error occurred');
+        setError(`Unexpected error: ${JSON.stringify(error)}`);
       }
     } finally {
       setLoading(false);

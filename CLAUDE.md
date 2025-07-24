@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Masjid At-Taqwa website is a Next.js 15 application built with TypeScript, featuring a modern Islamic community website with announcement management, event displays, prayer times, and calendar downloads. The project uses the App Router pattern and is designed for scalability and maintainability.
+Masjid At-Taqwa Digital Ecosystem is a comprehensive Islamic community platform built with a Turborepo monorepo architecture. It features a Next.js 15 frontend, Hono.js backend, and includes Islamic features like prayer times, educational content system, announcement management, and comprehensive monitoring. The project is designed for scalability and maintainability with modern web technologies.
 
 ## Development Commands
 
@@ -35,38 +35,45 @@ npm run test:coverage # Generate test coverage report
 
 ### Tech Stack
 - **Frontend**: Next.js 15 with App Router, React 19, TypeScript
+- **Backend**: Hono.js with JWT authentication and role-based access
+- **Database**: PostgreSQL with Prisma ORM
 - **Styling**: Tailwind CSS v4 with custom Islamic design system
 - **UI Components**: Shadcn/UI with Radix UI primitives
 - **State Management**: React Query for server state
 - **Forms**: React Hook Form with Zod validation
-- **Testing**: Jest with Testing Library
-- **Deployment**: Optimized for Vercel
+- **Testing**: Jest with Testing Library for all packages
+- **Monitoring**: Comprehensive logging and analytics system
+- **Deployment**: Docker containers optimized for production
 
-### Project Structure
+### Monorepo Structure
 ```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── layout.tsx         # Root layout with Header/Footer
-│   ├── page.tsx           # Homepage
-│   └── globals.css        # Global styles and CSS variables
-├── components/
-│   ├── ui/                # Shadcn/UI base components
-│   ├── features/          # Feature-specific components
-│   │   ├── announcements/ # Announcement cards and forms
-│   │   ├── events/        # Event cards and displays
-│   │   ├── calendar/      # Calendar download components
-│   │   └── prayer-times/  # Prayer time widgets
-│   └── layout/            # Layout components (Header, Footer)
-├── lib/
-│   ├── utils.ts           # Utility functions (cn, etc.)
-│   ├── hooks/             # Custom React hooks
-│   ├── services/          # API service functions
-│   └── validations/       # Zod schemas
-├── types/
-│   └── index.ts           # TypeScript type definitions
-└── constants/
-    └── index.ts           # Application constants
+packages/
+├── web/                    # Next.js 15 frontend
+│   ├── src/
+│   │   ├── app/           # Next.js App Router pages
+│   │   ├── components/    # React components
+│   │   └── lib/           # Utilities and hooks
+├── api/                    # Hono.js backend
+│   ├── src/
+│   │   ├── routes/        # API route handlers
+│   │   ├── middleware/    # Auth and logging
+│   │   └── lib/           # Backend utilities
+├── db/                     # Prisma database package
+│   └── prisma/
+│       ├── schema.prisma  # Database schema
+│       └── migrations/    # Database migrations
+└── shared/                 # Shared types and utilities
+    └── src/
+        ├── types/         # TypeScript interfaces
+        └── schemas/       # Zod validation schemas
 ```
+
+### Key Features Implemented
+- **Islamic Educational System**: Age-tier content filtering, interactive quizzes, progress tracking
+- **Prayer & Islamic Features**: Real-time prayer times, Qibla direction, Hijri calendar
+- **Admin Dashboard**: Role-based access, content management, analytics
+- **Monitoring System**: Real-time metrics, Islamic feature analytics, error tracking
+- **Authentication**: JWT-based with Admin/Moderator/User roles
 
 ### Key Design Patterns
 

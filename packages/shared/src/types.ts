@@ -148,11 +148,6 @@ export const Role = {
   USER: 'user',
 } as const;
 
-export const AgeTier = {
-  PRIMARY: 'PRIMARY',
-  INTERMEDIATE: 'INTERMEDIATE', 
-  HIGHER: 'HIGHER',
-} as const;
 
 export const Category = {
   TAFSIR: 'TAFSIR',
@@ -168,7 +163,188 @@ export const PaymentStatus = {
   FAILED: 'FAILED',
 } as const;
 
+// Educational system enums
+export enum AgeTier {
+  CHILDREN = 'CHILDREN', // 5-12 years
+  YOUTH = 'YOUTH',       // 13-17 years
+  ADULTS = 'ADULTS',     // 18+ years
+  SENIORS = 'SENIORS',   // 60+ years
+  ALL_AGES = 'ALL_AGES'
+}
+
+export enum IslamicSubject {
+  WORSHIP = 'WORSHIP',
+  QURAN = 'QURAN',
+  HADITH = 'HADITH',
+  FIQH = 'FIQH',
+  HISTORY = 'HISTORY',
+  AKHLAQ = 'AKHLAQ',
+  TAFSIR = 'TAFSIR',
+  SIRA = 'SIRA'
+}
+
+export enum DifficultyLevel {
+  BEGINNER = 'BEGINNER',
+  INTERMEDIATE = 'INTERMEDIATE',
+  ADVANCED = 'ADVANCED'
+}
+
+export enum EducationContentType {
+  LESSON = 'LESSON',
+  QUIZ = 'QUIZ',
+  VIDEO = 'VIDEO',
+  READING = 'READING'
+}
+
+export enum ProgressStatus {
+  NOT_STARTED = 'NOT_STARTED',
+  IN_PROGRESS = 'IN_PROGRESS',
+  COMPLETED = 'COMPLETED'
+}
+
+export enum QuestionType {
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  TRUE_FALSE = 'TRUE_FALSE',
+  SHORT_ANSWER = 'SHORT_ANSWER'
+}
+
+// Educational content interfaces
+export interface EducationContent {
+  id: string;
+  title: string;
+  description: string;
+  content: string;
+  contentType: EducationContentType;
+  subject: IslamicSubject;
+  ageTier: AgeTier;
+  difficultyLevel: DifficultyLevel;
+  isActive: boolean;
+  estimatedMinutes: number;
+  prerequisites: string[];
+  learningObjectives: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  authorId: string;
+  author?: User;
+  quizzes?: Quiz[];
+  userProgress?: UserProgress[];
+}
+
+export interface Quiz {
+  id: string;
+  contentId: string;
+  title: string;
+  description: string;
+  questions: QuizQuestion[];
+  passingScore: number;
+  timeLimit?: number;
+  isActive: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface QuizQuestion {
+  id: string;
+  quizId: string;
+  questionText: string;
+  questionType: QuestionType;
+  options: QuestionOption[];
+  correctAnswer: string;
+  explanation?: string;
+  points: number;
+  order: number;
+}
+
+export interface QuestionOption {
+  id: string;
+  text: string;
+  isCorrect: boolean;
+}
+
+export interface QuizAttempt {
+  id: string;
+  userId: string;
+  quizId: string;
+  score: number;
+  totalQuestions: number;
+  correctAnswers: number;
+  timeSpent: number;
+  passed: boolean;
+  answers: QuizAnswer[];
+  completedAt: Date;
+}
+
+export interface QuizAnswer {
+  questionId: string;
+  selectedAnswer: string;
+  isCorrect: boolean;
+  points: number;
+}
+
+// API request types
+export interface CreateEducationContentRequest {
+  title: string;
+  description: string;
+  content: string;
+  contentType: EducationContentType;
+  subject: IslamicSubject;
+  ageTier: AgeTier;
+  difficultyLevel: DifficultyLevel;
+  estimatedMinutes: number;
+  prerequisites?: string[];
+  learningObjectives: string[];
+}
+
+export interface CreateQuizRequest {
+  contentId: string;
+  title: string;
+  description: string;
+  questions: CreateQuizQuestionRequest[];
+  passingScore: number;
+  timeLimit?: number;
+}
+
+export interface CreateQuizQuestionRequest {
+  questionText: string;
+  questionType: QuestionType;
+  options: { text: string; isCorrect: boolean }[];
+  explanation?: string;
+  points: number;
+  order: number;
+}
+
+export interface CreateLessonRequest {
+  title: string;
+  content: string;
+  moduleId: string;
+  sortOrder: number;
+}
+
+export interface SubmitQuizAnswersRequest {
+  quizId: string;
+  answers: { questionId: string; selectedAnswer: string }[];
+  timeSpent: number;
+}
+
+export interface UpdateProgressRequest {
+  contentId: string;
+  completed: boolean;
+  timeSpent: number;
+  score?: number;
+}
+
+export interface EducationContentFilters {
+  ageTier?: AgeTier;
+  subject?: IslamicSubject;
+  difficultyLevel?: DifficultyLevel;
+  contentType?: EducationContentType;
+  search?: string;
+  authorId?: string;
+  isActive?: boolean;
+  limit?: number;
+  offset?: number;
+}
+
 export type RoleType = typeof Role[keyof typeof Role];
-export type AgeTierType = typeof AgeTier[keyof typeof AgeTier];
 export type CategoryType = typeof Category[keyof typeof Category];
 export type PaymentStatusType = typeof PaymentStatus[keyof typeof PaymentStatus];

@@ -1,0 +1,7 @@
+npm error Lifecycle script `web:dev` failed with error:
+npm error workspace @attaqwa/shared@0.1.0
+npm error location /Users/saninabil/WebstormProjects/attaqwa-masjid/packages/shared
+npm error Missing script: "web:dev"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run --workspace=@attaqwa/shared@0.1.0

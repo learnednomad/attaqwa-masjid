@@ -31,7 +31,7 @@ const users = new Map<string, {
   ['admin@attaqwa.org', {
     id: '1',
     email: 'admin@attaqwa.org',
-    password: '$2a$12$K8mJnhGBcHMz3X.yUqV3aeQrYGM4NVF3BX2Cz9x8Fj4K5L6M7N8O9P', // 'admin123'
+    password: '$2a$12$iKUAW6sSl2XQKcHXioulhutX9RoAGqV96QJTi3O4mnWvIwaYSEkJy', // 'admin123'
     name: 'Admin User',
     role: 'admin',
   }]

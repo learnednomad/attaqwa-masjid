@@ -65,11 +65,14 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   const router = useRouter();
   const pathname = usePathname();
 
+  // Don't apply auth checks to the login page
+  const isLoginPage = pathname === '/admin/login';
+
   useEffect(() => {
-    if (!loading && (!isAuthenticated || !isAdmin)) {
+    if (!isLoginPage && !loading && (!isAuthenticated || !isAdmin)) {
       router.push('/admin/login');
     }
-  }, [isAuthenticated, isAdmin, loading, router]);
+  }, [isAuthenticated, isAdmin, loading, router, isLoginPage]);
 
   const handleLogout = async () => {
     try {
@@ -86,6 +89,11 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-islamic-green-600"></div>
       </div>
     );
+  }
+
+  // For login page, just render the children without admin layout
+  if (isLoginPage) {
+    return <>{children}</>;
   }
 
   if (!isAuthenticated || !isAdmin) {

@@ -19,7 +19,7 @@ import { formatTime } from '@attaqwa/shared';
 export default function AdminDashboard() {
   const { data: announcements } = useAnnouncements({ limit: 5, isActive: true });
   const { data: upcomingEvents } = useEvents({ upcoming: true, limit: 5 });
-  const { data: prayerTimes } = useTodayPrayerTimes();
+  const { data: prayerTimes } = useTodayPrayerTimes(42.3601, -71.0589); // Boston coordinates
 
   const stats = [
     {

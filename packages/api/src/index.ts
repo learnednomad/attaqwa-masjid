@@ -11,6 +11,9 @@ import { announcementRoutes } from './routes/announcements.js';
 import { eventRoutes } from './routes/events.js';
 import { prayerTimeRoutes } from './routes/prayer-times.js';
 import { authRoutes } from './routes/auth.js';
+import educationRoutes from './routes/education.js';
+import monitoringRoutes from './routes/monitoring.js';
+import { enhancedLogger, islamicMetrics, errorTracker, performanceMonitor, healthCheck } from './middleware/logging.js';
 
 const app = new Hono();
 
@@ -20,26 +23,31 @@ app.use('*', timing());
 app.use('*', prettyJSON());
 app.use('*', secureHeaders());
 app.use('*', cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+  origin: [
+    process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:3002', // Alternative development port
+  ],
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
 }));
 
-// Health check
-app.get('/health', (c) => {
-  return c.json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    version: '1.0.0'
-  });
-});
+// Enhanced monitoring middleware
+app.use('*', enhancedLogger);
+app.use('*', islamicMetrics);
+app.use('*', errorTracker);
+app.use('*', performanceMonitor);
+
+// Enhanced health check with Islamic features
+app.get('/health', healthCheck);
 
 // API routes
 app.route('/api/auth', authRoutes);
 app.route('/api/announcements', announcementRoutes);
 app.route('/api/events', eventRoutes);
 app.route('/api/prayer-times', prayerTimeRoutes);
+app.route('/api/education', educationRoutes);
+app.route('/api/monitoring', monitoringRoutes);
 
 // 404 handler
 app.notFound((c) => {
