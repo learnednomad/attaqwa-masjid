@@ -168,7 +168,7 @@ export const EducationCertificateSchema = z.object({
   issuedAt: z.date(),
   expiresAt: z.date().optional(),
   certificateUrl: z.string().url().optional(),
-  verificationCode: z.string().unique(),
+  verificationCode: z.string(),
   issuerName: z.string().default('Masjid At-Taqwa'),
   issuerSignature: z.string().optional(),
 });

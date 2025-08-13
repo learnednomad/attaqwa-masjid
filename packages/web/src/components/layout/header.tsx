@@ -9,6 +9,7 @@ import { MOSQUE_INFO } from '@/constants';
 
 const navigation = [
   { name: 'Home', href: '/' },
+  { name: 'Education', href: '/education' },
   { name: 'Events', href: '/events' },
   { name: 'Announcements', href: '/announcements' },
   { name: 'Calendar', href: '/calendar' },
