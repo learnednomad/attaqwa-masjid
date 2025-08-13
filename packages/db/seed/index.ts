@@ -78,8 +78,10 @@ async function main() {
     date.setDate(today.getDate() + i);
     date.setHours(0, 0, 0, 0);
 
-    await prisma.prayerSchedule.create({
-      data: {
+    await prisma.prayerSchedule.upsert({
+      where: { date },
+      update: {},
+      create: {
         date,
         fajr: '06:12',
         sunrise: '07:42',
@@ -94,43 +96,10 @@ async function main() {
 
   console.log('✅ Created prayer schedules');
 
-  // Create sample educational content
-  const tafsirModule = await prisma.contentModule.create({
-    data: {
-      title: 'Introduction to Tafsir',
-      description: 'Learn the basics of Quran interpretation',
-      category: 'TAFSIR',
-      ageTier: 'INTERMEDIATE',
-    },
-  });
-
-  const lesson1 = await prisma.lesson.create({
-    data: {
-      title: 'What is Tafsir?',
-      content: 'Tafsir is the Arabic word for exegesis, usually of the Quran...',
-      moduleId: tafsirModule.id,
-      sortOrder: 1,
-    },
-  });
-
-  await prisma.question.create({
-    data: {
-      lessonId: lesson1.id,
-      questionText: 'What does the word "Tafsir" mean?',
-      options: {
-        options: [
-          { text: 'Exegesis or interpretation', isCorrect: true },
-          { text: 'Translation', isCorrect: false },
-          { text: 'Recitation', isCorrect: false },
-          { text: 'Memorization', isCorrect: false },
-        ],
-      },
-      explanation: 'Tafsir comes from the Arabic root f-s-r, meaning to explain or interpret.',
-      sortOrder: 1,
-    },
-  });
-
-  console.log('✅ Created educational content');
+  // Seed Islamic educational content using the working seeder
+  const { seedEducationContent } = await import('./education-content.js');
+  await seedEducationContent();
+  console.log('✅ Created comprehensive Islamic educational content');
 
   console.log('🎉 Database seeding completed!');
 }
