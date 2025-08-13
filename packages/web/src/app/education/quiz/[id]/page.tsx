@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { FeatureFlagService } from '@attaqwa/shared/feature-flags';
+import { Button } from '@/components/ui/button';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -106,6 +108,22 @@ const mockQuiz: Quiz = {
 };
 
 export default function QuizPage() {
+  // Feature flag protection
+  if (!FeatureFlagService.canAccessEducationUI()) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-islamic-navy-800 mb-4">Education Quiz</h1>
+          <div className="bg-islamic-gold-50 border border-islamic-gold-200 rounded-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold text-islamic-gold-800 mb-2">🚧 Under Development</h2>
+            <p className="text-islamic-gold-700">Interactive quiz system is being enhanced.</p>
+          </div>
+          <Link href="/"><Button className="bg-islamic-green-600 hover:bg-islamic-green-700">Return to Home</Button></Link>
+        </div>
+      </div>
+    );
+  }
+
   const params = useParams();
   const quizId = params.id as string;
   

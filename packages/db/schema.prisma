@@ -17,16 +17,24 @@ model User {
   password   String   // Hashed password
   name       String
   role       Role     @default(USER)
-  ageTier    AgeTier?
+  ageTier    AgeTier? // User's age tier for content filtering
   isActive   Boolean  @default(true)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
   
   // Relations
-  announcements Announcement[]
-  progress      UserProgress[]
-  sessions      AdminSession[]
+  announcements       Announcement[]
+  sessions           AdminSession[]
+  educationContent   EducationContent[] @relation("ContentAuthor")
+  userProgress       UserProgress[]
+  quizAttempts       QuizAttempt[]
+  certificates       EducationCertificate[]
+  achievements       UserAchievement[]
+  learningPaths      UserLearningPath[]
 
+  @@index([email])
+  @@index([role])
+  @@index([ageTier])
   @@map("users")
 }
 
@@ -143,95 +151,434 @@ model BlogPost {
   @@map("blog_posts")
 }
 
-// Educational Content Models
-model ContentModule {
-  id          String     @id @default(cuid())
+// Core Educational Content Model - Supports all content types
+model EducationContent {
+  id                String               @id @default(cuid())
+  title             String
+  description       String               @db.Text
+  content           String               @db.Text // Main content (markdown, HTML, etc.)
+  contentType       EducationContentType
+  subject           IslamicSubject
+  ageTier           AgeTier
+  difficultyLevel   DifficultyLevel
+  estimatedDuration Int                  // in minutes
+  prerequisites     String[]             // Array of content IDs
+  tags              String[]             // Searchable tags
+  mediaUrl          String?              // Primary media resource
+  thumbnailUrl      String?              // Preview image
+  arabicContent     String?              @db.Text // Arabic version of content
+  transliteration   String?              @db.Text // Romanized Arabic
+  translation       String?              @db.Text // English translation
+  isPublished       Boolean              @default(false)
+  viewCount         Int                  @default(0)
+  rating            Float?               // Average rating
+  authorId          String
+  author            User                 @relation("ContentAuthor", fields: [authorId], references: [id])
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+
+  // Relations
+  chapters         Chapter[]
+  resources        ContentResource[]
+  quizzes          Quiz[]
+  userProgress     UserProgress[]
+  islamicReferences IslamicReference[]
+  learningPathItems LearningPathItem[]
+
+  @@index([contentType, subject, ageTier, difficultyLevel])
+  @@index([isPublished, contentType])
+  @@index([authorId])
+  @@index([subject])
+  @@index([ageTier])
+  @@index([title]) // Text search will be handled by PostgreSQL's built-in text search
+  @@map("education_content")
+}
+
+// Chapter for lesson-type content
+model Chapter {
+  id                String           @id @default(cuid())
+  contentId         String
+  educationContent  EducationContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  title             String
+  chapterContent    String           @db.Text // Renamed to avoid conflict
+  order             Int
+  estimatedDuration Int              // in minutes
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  @@unique([contentId, order])
+  @@index([contentId])
+  @@map("chapters")
+}
+
+// Additional resources for content
+model ContentResource {
+  id               String           @id @default(cuid())
+  contentId        String
+  educationContent EducationContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  title            String
+  url              String
+  type             ResourceType     // PDF, VIDEO, AUDIO, LINK
+  order            Int              @default(0)
+  createdAt        DateTime         @default(now())
+
+  @@index([contentId])
+  @@map("content_resources")
+}
+
+// Quiz System
+model Quiz {
+  id               String           @id @default(cuid())
+  contentId        String?
+  content          EducationContent? @relation(fields: [contentId], references: [id], onDelete: SetNull)
+  title            String
+  description      String           @db.Text
+  timeLimit        Int?             // in minutes
+  passingScore     Int              @default(70) // percentage
+  maxAttempts      Int              @default(3)
+  showCorrectAnswers Boolean        @default(true)
+  shuffleQuestions Boolean          @default(false)
+  isActive         Boolean          @default(true)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+
+  // Relations
+  questions    QuizQuestion[]
+  attempts     QuizAttempt[]
+
+  @@index([contentId])
+  @@index([isActive])
+  @@map("quizzes")
+}
+
+model QuizQuestion {
+  id              String       @id @default(cuid())
+  quizId          String
+  quiz            Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  questionText    String       @db.Text
+  questionType    QuestionType
+  arabicText      String?      @db.Text // Arabic version of question
+  reference       String?      // Quran/Hadith reference
+  explanation     String?      @db.Text
+  points          Int          @default(1)
+  order           Int
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  // Relations
+  options      QuestionOption[]
+  answers      QuizAnswer[]
+
+  @@unique([quizId, order])
+  @@index([quizId])
+  @@map("quiz_questions")
+}
+
+model QuestionOption {
+  id         String       @id @default(cuid())
+  questionId String
+  question   QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  text       String
+  isCorrect  Boolean      @default(false)
+  order      Int          @default(0)
+
+  @@index([questionId])
+  @@map("question_options")
+}
+
+// Quiz Attempts and Scoring
+model QuizAttempt {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId         String
+  quiz           Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  score          Float        // percentage score
+  totalQuestions Int
+  correctAnswers Int
+  timeSpent      Int          // in seconds
+  isPassed       Boolean
+  startedAt      DateTime     @default(now())
+  completedAt    DateTime?
+
+  // Relations
+  answers        QuizAnswer[]
+
+  @@index([userId, quizId])
+  @@index([userId])
+  @@index([quizId])
+  @@index([completedAt])
+  @@map("quiz_attempts")
+}
+
+model QuizAnswer {
+  id             String       @id @default(cuid())
+  attemptId      String
+  attempt        QuizAttempt  @relation(fields: [attemptId], references: [id], onDelete: Cascade)
+  questionId     String
+  question       QuizQuestion @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  selectedAnswer String       // The answer text or option ID
+  isCorrect      Boolean
+  points         Int          @default(0)
+  timeSpent      Int          // in seconds
+
+  @@unique([attemptId, questionId])
+  @@index([attemptId])
+  @@index([questionId])
+  @@map("quiz_answers")
+}
+
+// Enhanced Progress Tracking
+model UserProgress {
+  id             String           @id @default(cuid())
+  userId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  contentId      String
+  content        EducationContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  status         ProgressStatus   @default(NOT_STARTED)
+  progress       Int              @default(0) // percentage 0-100
+  currentChapter Int?             // For lesson-type content
+  timeSpent      Int              @default(0) // in minutes
+  lastAccessed   DateTime         @default(now())
+  completedAt    DateTime?
+  score          Float?           // Average score for quizzes
+  attempts       Int              @default(0)
+  notes          String?          @db.Text // User's personal notes
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@unique([userId, contentId])
+  @@index([userId, status])
+  @@index([contentId])
+  @@index([lastAccessed])
+  @@map("user_progress")
+}
+
+// Achievement and Certification System
+model EducationCertificate {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId         String?  // For learning path completion
+  contentId        String?  // For individual content completion
+  title            String
+  description      String   @db.Text
+  issuedAt         DateTime @default(now())
+  expiresAt        DateTime?
+  certificateUrl   String?  // URL to PDF certificate
+  verificationCode String   @unique
+  issuerName       String   @default("Masjid At-Taqwa")
+  issuerSignature  String?  // Digital signature or authorized person name
+
+  @@index([userId])
+  @@index([verificationCode])
+  @@map("education_certificates")
+}
+
+// Islamic References
+model IslamicReference {
+  id              String           @id @default(cuid())
+  contentId       String
+  content         EducationContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  referenceType   ReferenceType    // QURAN, HADITH, DUA
+  surahNumber     Int?             // For Quran
+  ayahNumber      Int?             // For Quran
+  hadithBook      String?          // Bukhari, Muslim, etc.
+  hadithNumber    String?          // Hadith number
+  arabicText      String           @db.Text
+  transliteration String?          @db.Text
+  translation     String           @db.Text
+  grade           String?          // For hadith: Sahih, Hasan, etc.
+
+  @@index([contentId])
+  @@map("islamic_references")
+}
+
+// Learning Paths
+model LearningPath {
+  id                String            @id @default(cuid())
+  title             String
+  description       String            @db.Text
+  subject           IslamicSubject
+  ageTier           AgeTier
+  difficultyLevel   DifficultyLevel
+  estimatedDuration Int               // total duration in hours
+  isPublished       Boolean           @default(false)
+  authorId          String
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  // Relations
+  items             LearningPathItem[]
+  userPaths         UserLearningPath[]
+
+  @@index([subject, ageTier, difficultyLevel])
+  @@index([isPublished])
+  @@map("learning_paths")
+}
+
+model LearningPathItem {
+  id           String           @id @default(cuid())
+  pathId       String
+  path         LearningPath     @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  contentId    String
+  content      EducationContent @relation(fields: [contentId], references: [id], onDelete: Cascade)
+  order        Int
+  isRequired   Boolean          @default(true)
+
+  @@unique([pathId, order])
+  @@index([pathId])
+  @@index([contentId])
+  @@map("learning_path_items")
+}
+
+model UserLearningPath {
+  id            String       @id @default(cuid())
+  userId        String
+  user          User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pathId        String
+  path          LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  progress      Int          @default(0) // percentage
+  currentItemId String?      // Current content item
+  startedAt     DateTime     @default(now())
+  completedAt   DateTime?
+
+  @@unique([userId, pathId])
+  @@index([userId])
+  @@index([pathId])
+  @@map("user_learning_paths")
+}
+
+// Achievement System
+model Achievement {
+  id          String            @id @default(cuid())
   title       String
   description String
-  category    Category
-  ageTier     AgeTier
-  isActive    Boolean    @default(true)
-  sortOrder   Int        @default(0)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  
+  icon        String            // Icon identifier or URL
+  criteriaType AchievementType  // COMPLETION, SCORE, STREAK, etc.
+  criteriaValue Int             // The target value
+  subject     IslamicSubject?   // Optional subject focus
+  points      Int               @default(10)
+  isRare      Boolean           @default(false)
+  createdAt   DateTime          @default(now())
+
   // Relations
-  lessons  Lesson[]
-  versions ContentVersion[]
+  userAchievements UserAchievement[]
 
-  @@map("content_modules")
+  @@map("achievements")
 }
 
-model ContentVersion {
-  id          String        @id @default(cuid())
-  moduleId    String
-  module      ContentModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  version     Int
-  content     Json
-  publishedAt DateTime?
-  createdAt   DateTime      @default(now())
+model UserAchievement {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  achievementId String
+  achievement   Achievement @relation(fields: [achievementId], references: [id], onDelete: Cascade)
+  earnedAt      DateTime    @default(now())
+  progress      Int         @default(100) // 0-100 percentage
 
-  @@unique([moduleId, version])
-  @@map("content_versions")
-}
-
-model Lesson {
-  id          String   @id @default(cuid())
-  title       String
-  content     String   // Story/Verse content in Markdown
-  moduleId    String
-  module      ContentModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-  sortOrder   Int      @default(0)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relations
-  questions Question[]
-  progress  UserProgress[]
-
-  @@map("lessons")
-}
-
-model Question {
-  id           String @id @default(cuid())
-  lessonId     String
-  lesson       Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  questionText String
-  options      Json   // Expected format: { options: [{ text: string, isCorrect: boolean }] }
-  explanation  String
-  sortOrder    Int    @default(0)
-
-  @@map("questions")
-}
-
-model UserProgress {
-  id        String   @id @default(cuid())
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lessonId  String
-  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-  score     Int
-  completed Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@unique([userId, lessonId])
-  @@map("user_progress")
+  @@unique([userId, achievementId])
+  @@index([userId])
+  @@index([achievementId])
+  @@map("user_achievements")
 }
 
 // Enums
 enum Role {
   ADMIN
+  MODERATOR
   USER
 }
 
+// Age tiers for Islamic education
 enum AgeTier {
-  PRIMARY      // 7-9
-  INTERMEDIATE // 10-14
-  HIGHER       // 14-18
+  CHILDREN    // 5-12 years
+  YOUTH       // 13-17 years
+  ADULTS      // 18+ years
+  SENIORS     // 60+ years
+  ALL_AGES    // Suitable for all ages
 }
 
+// Education content types
+enum EducationContentType {
+  LESSON
+  QUIZ
+  VIDEO
+  AUDIO
+  READING
+  INTERACTIVE
+}
+
+// Islamic subject categories
+enum IslamicSubject {
+  QURAN
+  HADITH
+  FIQH
+  AQIDAH
+  SEERAH
+  ISLAMIC_HISTORY
+  ARABIC_LANGUAGE
+  DUA_DHIKR
+  ISLAMIC_ETIQUETTE
+  COMPARATIVE_RELIGION
+  TAFSIR
+  AKHLAQ
+  WORSHIP
+  SIRA
+  HISTORY
+}
+
+// Difficulty levels
+enum DifficultyLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  SCHOLAR
+}
+
+// Progress status
+enum ProgressStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  PAUSED
+}
+
+// Question types for quizzes
+enum QuestionType {
+  MULTIPLE_CHOICE
+  TRUE_FALSE
+  SHORT_ANSWER
+  ESSAY
+  MATCHING
+  FILL_BLANK
+}
+
+// Resource types
+enum ResourceType {
+  PDF
+  VIDEO
+  AUDIO
+  LINK
+}
+
+// Reference types for Islamic content
+enum ReferenceType {
+  QURAN
+  HADITH
+  DUA
+}
+
+// Achievement types
+enum AchievementType {
+  COMPLETION
+  SCORE
+  STREAK
+  TIME_SPENT
+  QUIZ_ATTEMPTS
+}
+
+// Legacy enums (kept for backward compatibility)
 enum Category {
   TAFSIR
   SIRA

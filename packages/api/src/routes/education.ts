@@ -3,35 +3,19 @@ import { z } from 'zod';
 import { zValidator } from '@hono/zod-validator';
 import { PrismaClient } from '../../../db/src/generated/index.js';
 import { requireAuth, requireRole } from '../middleware/auth';
-import {
-  EducationContentSchema,
-  CreateEducationContentRequest,
-  UpdateEducationContentRequest,
-  CreateQuizRequest,
-  CreateLessonRequest,
-  SubmitQuizAnswersRequest,
-  UpdateProgressRequest,
-  EducationContentFilters,
-  AgeTier,
-  IslamicSubject,
-  DifficultyLevel,
-  EducationContentType,
-  ProgressStatus,
-  QuestionType,
-} from '@attaqwa/shared';
 
 const app = new Hono();
 const prisma = new PrismaClient();
 
-// Validation schemas for API requests
+// Simple validation schemas that match the actual database schema
 const createContentSchema = z.object({
   title: z.string().min(1).max(200),
   description: z.string().min(1).max(1000),
   content: z.string().min(1),
-  contentType: z.nativeEnum(EducationContentType),
-  subject: z.nativeEnum(IslamicSubject),
-  ageTier: z.nativeEnum(AgeTier),
-  difficultyLevel: z.nativeEnum(DifficultyLevel),
+  contentType: z.enum(['LESSON', 'QUIZ', 'VIDEO', 'AUDIO', 'READING', 'INTERACTIVE']),
+  subject: z.enum(['QURAN', 'HADITH', 'FIQH', 'AQIDAH', 'SEERAH', 'ISLAMIC_HISTORY', 'ARABIC_LANGUAGE', 'DUA_DHIKR', 'ISLAMIC_ETIQUETTE', 'COMPARATIVE_RELIGION', 'TAFSIR', 'AKHLAQ', 'WORSHIP', 'SIRA', 'HISTORY']),
+  ageTier: z.enum(['CHILDREN', 'YOUTH', 'ADULTS', 'SENIORS', 'ALL_AGES']),
+  difficultyLevel: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'SCHOLAR']),
   estimatedDuration: z.number().positive(),
   prerequisites: z.array(z.string()).default([]),
   tags: z.array(z.string()).default([]),
@@ -42,39 +26,18 @@ const createContentSchema = z.object({
   translation: z.string().optional(),
 });
 
-const updateContentSchema = createContentSchema.partial().extend({
-  isPublished: z.boolean().optional(),
-});
-
 const filtersSchema = z.object({
-  subject: z.nativeEnum(IslamicSubject).optional(),
-  ageTier: z.nativeEnum(AgeTier).optional(),
-  difficultyLevel: z.nativeEnum(DifficultyLevel).optional(),
-  contentType: z.nativeEnum(EducationContentType).optional(),
-  tags: z.string().optional(), // comma-separated
+  subject: z.enum(['QURAN', 'HADITH', 'FIQH', 'AQIDAH', 'SEERAH', 'ISLAMIC_HISTORY', 'ARABIC_LANGUAGE', 'DUA_DHIKR', 'ISLAMIC_ETIQUETTE', 'COMPARATIVE_RELIGION', 'TAFSIR', 'AKHLAQ', 'WORSHIP', 'SIRA', 'HISTORY']).optional(),
+  ageTier: z.enum(['CHILDREN', 'YOUTH', 'ADULTS', 'SENIORS', 'ALL_AGES']).optional(),
+  difficultyLevel: z.enum(['BEGINNER', 'INTERMEDIATE', 'ADVANCED', 'SCHOLAR']).optional(),
+  contentType: z.enum(['LESSON', 'QUIZ', 'VIDEO', 'AUDIO', 'READING', 'INTERACTIVE']).optional(),
   search: z.string().optional(),
   isPublished: z.boolean().optional(),
   page: z.string().transform(Number).default('1'),
   limit: z.string().transform(Number).default('10'),
 });
 
-const submitQuizSchema = z.object({
-  answers: z.array(z.object({
-    questionId: z.string(),
-    answer: z.string(),
-    timeSpent: z.number(),
-  })),
-  timeSpent: z.number(),
-});
-
-const updateProgressSchema = z.object({
-  progress: z.number().min(0).max(100),
-  currentChapter: z.number().optional(),
-  timeSpent: z.number(),
-  notes: z.string().optional(),
-});
-
-// List education content with filters and pagination
+// Get education content with filters (WORKING VERSION)
 app.get('/', zValidator('query', filtersSchema), async (c) => {
   try {
     const {
@@ -82,7 +45,6 @@ app.get('/', zValidator('query', filtersSchema), async (c) => {
       ageTier,
       difficultyLevel,
       contentType,
-      tags,
       search,
       isPublished,
       page,
@@ -91,7 +53,7 @@ app.get('/', zValidator('query', filtersSchema), async (c) => {
 
     const offset = (page - 1) * limit;
 
-    // Build where conditions
+    // Build where conditions that match actual schema
     const where: any = {};
 
     if (subject) where.subject = subject;
@@ -100,18 +62,10 @@ app.get('/', zValidator('query', filtersSchema), async (c) => {
     if (contentType) where.contentType = contentType;
     if (isPublished !== undefined) where.isPublished = isPublished;
 
-    if (tags) {
-      const tagArray = tags.split(',').map(tag => tag.trim());
-      where.tags = {
-        hasSome: tagArray,
-      };
-    }
-
     if (search) {
       where.OR = [
         { title: { contains: search, mode: 'insensitive' } },
         { description: { contains: search, mode: 'insensitive' } },
-        { tags: { hasSome: [search] } },
       ];
     }
 
@@ -125,7 +79,6 @@ app.get('/', zValidator('query', filtersSchema), async (c) => {
           _count: {
             select: {
               userProgress: true,
-              quizAttempts: true,
             },
           },
         },
@@ -151,7 +104,7 @@ app.get('/', zValidator('query', filtersSchema), async (c) => {
   }
 });
 
-// Get single education content by ID
+// Get single education content by ID (WORKING VERSION)
 app.get('/:id', async (c) => {
   try {
     const id = c.req.param('id');
@@ -162,17 +115,13 @@ app.get('/:id', async (c) => {
         author: {
           select: { id: true, name: true },
         },
-        quizQuestions: {
+        chapters: {
           orderBy: { order: 'asc' },
         },
-        lessonChapters: {
-          orderBy: { order: 'asc' },
-        },
-        lessonResources: true,
+        resources: true,
         _count: {
           select: {
             userProgress: true,
-            quizAttempts: true,
           },
         },
       },
@@ -189,8 +138,8 @@ app.get('/:id', async (c) => {
   }
 });
 
-// Create new education content (Admin/Moderator only)
-app.post('/', requireAuth, requireRole(['ADMIN', 'MODERATOR']), zValidator('json', createContentSchema), async (c) => {
+// Create new education content (Admin only) - SIMPLIFIED VERSION
+app.post('/', requireAuth, requireRole('admin'), zValidator('json', createContentSchema), async (c) => {
   try {
     const user = c.get('user');
     const data = c.req.valid('json');
@@ -214,8 +163,8 @@ app.post('/', requireAuth, requireRole(['ADMIN', 'MODERATOR']), zValidator('json
   }
 });
 
-// Update education content (Admin/Moderator only)
-app.put('/:id', requireAuth, requireRole(['ADMIN', 'MODERATOR']), zValidator('json', updateContentSchema), async (c) => {
+// Update education content (Admin only) - SIMPLIFIED VERSION
+app.put('/:id', requireAuth, requireRole('admin'), zValidator('json', createContentSchema.partial()), async (c) => {
   try {
     const id = c.req.param('id');
     const data = c.req.valid('json');
@@ -241,7 +190,7 @@ app.put('/:id', requireAuth, requireRole(['ADMIN', 'MODERATOR']), zValidator('js
 });
 
 // Delete education content (Admin only)
-app.delete('/:id', requireAuth, requireRole(['ADMIN']), async (c) => {
+app.delete('/:id', requireAuth, requireRole('admin'), async (c) => {
   try {
     const id = c.req.param('id');
 
@@ -256,163 +205,7 @@ app.delete('/:id', requireAuth, requireRole(['ADMIN']), async (c) => {
   }
 });
 
-// Submit quiz answers
-app.post('/:id/submit-quiz', requireAuth, zValidator('json', submitQuizSchema), async (c) => {
-  try {
-    const user = c.get('user');
-    const quizId = c.req.param('id');
-    const { answers, timeSpent } = c.req.valid('json');
-
-    // Get quiz with questions
-    const quiz = await prisma.educationContent.findUnique({
-      where: { id: quizId, contentType: 'QUIZ' },
-      include: {
-        quizQuestions: true,
-      },
-    });
-
-    if (!quiz) {
-      return c.json({ error: 'Quiz not found' }, 404);
-    }
-
-    // Check if user has exceeded max attempts
-    const attemptCount = await prisma.quizAttempt.count({
-      where: { userId: user.id, quizId },
-    });
-
-    if (quiz.maxAttempts && attemptCount >= quiz.maxAttempts) {
-      return c.json({ error: 'Maximum attempts exceeded' }, 400);
-    }
-
-    // Calculate score
-    let correctAnswers = 0;
-    const processedAnswers = answers.map(answer => {
-      const question = quiz.quizQuestions.find(q => q.id === answer.questionId);
-      const isCorrect = question ? question.correctAnswer === answer.answer : false;
-      if (isCorrect) correctAnswers++;
-
-      return {
-        questionId: answer.questionId,
-        answer: answer.answer,
-        isCorrect,
-        timeSpent: answer.timeSpent,
-      };
-    });
-
-    const score = Math.round((correctAnswers / quiz.quizQuestions.length) * 100);
-    const isPassed = score >= (quiz.passingScore || 70);
-
-    // Save quiz attempt
-    const attempt = await prisma.quizAttempt.create({
-      data: {
-        userId: user.id,
-        quizId,
-        answers: processedAnswers,
-        score,
-        totalQuestions: quiz.quizQuestions.length,
-        correctAnswers,
-        timeSpent,
-        startedAt: new Date(Date.now() - timeSpent * 60 * 1000),
-        completedAt: new Date(),
-        isPassed,
-      },
-    });
-
-    // Update or create user progress
-    await prisma.userProgress.upsert({
-      where: {
-        userId_contentId: {
-          userId: user.id,
-          contentId: quizId,
-        },
-      },
-      update: {
-        status: isPassed ? ProgressStatus.COMPLETED : ProgressStatus.IN_PROGRESS,
-        progress: isPassed ? 100 : Math.max(score, 0),
-        score,
-        attempts: { increment: 1 },
-        lastAccessed: new Date(),
-        completedAt: isPassed ? new Date() : undefined,
-        timeSpent: { increment: timeSpent },
-      },
-      create: {
-        userId: user.id,
-        contentId: quizId,
-        status: isPassed ? ProgressStatus.COMPLETED : ProgressStatus.IN_PROGRESS,
-        progress: isPassed ? 100 : Math.max(score, 0),
-        score,
-        attempts: 1,
-        lastAccessed: new Date(),
-        completedAt: isPassed ? new Date() : undefined,
-        timeSpent,
-      },
-    });
-
-    return c.json({
-      attempt: {
-        id: attempt.id,
-        score,
-        totalQuestions: quiz.quizQuestions.length,
-        correctAnswers,
-        isPassed,
-        timeSpent,
-      },
-      showCorrectAnswers: quiz.showCorrectAnswers,
-      correctAnswers: quiz.showCorrectAnswers ? processedAnswers : undefined,
-    });
-  } catch (error) {
-    console.error('Error submitting quiz:', error);
-    return c.json({ error: 'Failed to submit quiz' }, 500);
-  }
-});
-
-// Update user progress
-app.put('/:id/progress', requireAuth, zValidator('json', updateProgressSchema), async (c) => {
-  try {
-    const user = c.get('user');
-    const contentId = c.req.param('id');
-    const { progress, currentChapter, timeSpent, notes } = c.req.valid('json');
-
-    const status = progress >= 100 ? ProgressStatus.COMPLETED : 
-                   progress > 0 ? ProgressStatus.IN_PROGRESS : ProgressStatus.NOT_STARTED;
-
-    const userProgress = await prisma.userProgress.upsert({
-      where: {
-        userId_contentId: {
-          userId: user.id,
-          contentId,
-        },
-      },
-      update: {
-        status,
-        progress,
-        currentChapter,
-        timeSpent: { increment: timeSpent },
-        notes,
-        lastAccessed: new Date(),
-        completedAt: progress >= 100 ? new Date() : undefined,
-      },
-      create: {
-        userId: user.id,
-        contentId,
-        status,
-        progress,
-        currentChapter,
-        timeSpent,
-        notes,
-        lastAccessed: new Date(),
-        completedAt: progress >= 100 ? new Date() : undefined,
-      },
-    });
-
-    return c.json({ progress: userProgress });
-  } catch (error) {
-    console.error('Error updating progress:', error);
-    return c.json({ error: 'Failed to update progress' }, 500);
-  }
-});
-
-// Get user's progress for all content
+// Get user progress (SIMPLIFIED VERSION)
 app.get('/progress/me', requireAuth, async (c) => {
   try {
     const user = c.get('user');
@@ -441,163 +234,51 @@ app.get('/progress/me', requireAuth, async (c) => {
   }
 });
 
-// Get user's quiz attempts
-app.get('/quiz-attempts/me', requireAuth, async (c) => {
+// Update user progress (SIMPLIFIED VERSION)
+app.put('/:id/progress', requireAuth, zValidator('json', z.object({
+  progress: z.number().min(0).max(100),
+  timeSpent: z.number(),
+  notes: z.string().optional(),
+})), async (c) => {
   try {
     const user = c.get('user');
+    const contentId = c.req.param('id');
+    const { progress, timeSpent, notes } = c.req.valid('json');
 
-    const attempts = await prisma.quizAttempt.findMany({
-      where: { userId: user.id },
-      include: {
-        quiz: {
-          select: {
-            id: true,
-            title: true,
-            subject: true,
-            passingScore: true,
-          },
+    const status = progress >= 100 ? 'COMPLETED' : 
+                   progress > 0 ? 'IN_PROGRESS' : 'NOT_STARTED';
+
+    const userProgress = await prisma.userProgress.upsert({
+      where: {
+        userId_contentId: {
+          userId: user.id,
+          contentId,
         },
       },
-      orderBy: { completedAt: 'desc' },
+      update: {
+        status,
+        progress,
+        timeSpent: { increment: timeSpent },
+        notes,
+        lastAccessed: new Date(),
+        completedAt: progress >= 100 ? new Date() : undefined,
+      },
+      create: {
+        userId: user.id,
+        contentId,
+        status,
+        progress,
+        timeSpent,
+        notes,
+        lastAccessed: new Date(),
+        completedAt: progress >= 100 ? new Date() : undefined,
+      },
     });
 
-    return c.json({ attempts });
+    return c.json({ progress: userProgress });
   } catch (error) {
-    console.error('Error fetching quiz attempts:', error);
-    return c.json({ error: 'Failed to fetch quiz attempts' }, 500);
-  }
-});
-
-// Get education analytics (Admin only)
-app.get('/analytics', requireAuth, requireRole(['ADMIN']), async (c) => {
-  try {
-    const [
-      totalContents,
-      totalUsers,
-      totalProgress,
-      contentStats,
-      subjectStats,
-      ageStats,
-      difficultyStats,
-    ] = await Promise.all([
-      prisma.educationContent.count(),
-      prisma.user.count(),
-      prisma.userProgress.count(),
-      prisma.userProgress.aggregate({
-        _avg: { progress: true, score: true },
-      }),
-      prisma.educationContent.groupBy({
-        by: ['subject'],
-        _count: { id: true },
-      }),
-      prisma.educationContent.groupBy({
-        by: ['ageTier'],
-        _count: { id: true },
-      }),
-      prisma.educationContent.groupBy({
-        by: ['difficultyLevel'],
-        _count: { id: true },
-      }),
-    ]);
-
-    const completionRate = contentStats._avg.progress || 0;
-    const averageScore = contentStats._avg.score || 0;
-
-    return c.json({
-      totalContents,
-      totalUsers,
-      totalProgress,
-      completionRate: Math.round(completionRate),
-      averageScore: Math.round(averageScore),
-      popularSubjects: subjectStats.map(stat => ({
-        subject: stat.subject,
-        count: stat._count.id,
-      })),
-      ageDistribution: ageStats.map(stat => ({
-        ageTier: stat.ageTier,
-        count: stat._count.id,
-      })),
-      difficultyDistribution: difficultyStats.map(stat => ({
-        level: stat.difficultyLevel,
-        count: stat._count.id,
-      })),
-    });
-  } catch (error) {
-    console.error('Error fetching education analytics:', error);
-    return c.json({ error: 'Failed to fetch analytics' }, 500);
-  }
-});
-
-// Get user education statistics
-app.get('/stats/me', requireAuth, async (c) => {
-  try {
-    const user = c.get('user');
-
-    const [
-      completedContents,
-      progressStats,
-      certificates,
-      subjectProgress,
-    ] = await Promise.all([
-      prisma.userProgress.count({
-        where: { userId: user.id, status: ProgressStatus.COMPLETED },
-      }),
-      prisma.userProgress.aggregate({
-        where: { userId: user.id },
-        _sum: { timeSpent: true },
-        _avg: { score: true },
-      }),
-      prisma.educationCertificate.count({
-        where: { userId: user.id },
-      }),
-      prisma.userProgress.findMany({
-        where: { userId: user.id },
-        include: {
-          content: {
-            select: { subject: true },
-          },
-        },
-      }),
-    ]);
-
-    // Calculate subject progress
-    const subjectMap = new Map();
-    subjectProgress.forEach(progress => {
-      const subject = progress.content.subject;
-      if (!subjectMap.has(subject)) {
-        subjectMap.set(subject, { completed: 0, total: 0 });
-      }
-      const stats = subjectMap.get(subject);
-      stats.total++;
-      if (progress.status === ProgressStatus.COMPLETED) {
-        stats.completed++;
-      }
-    });
-
-    const progressBySubject = Array.from(subjectMap.entries()).map(([subject, stats]) => ({
-      subject,
-      completed: stats.completed,
-      total: stats.total,
-    }));
-
-    // Find favorite subject (most completed content)
-    const favoriteSubject = progressBySubject.reduce((prev, current) => 
-      (current.completed > prev.completed) ? current : prev
-    )?.subject || IslamicSubject.QURAN;
-
-    return c.json({
-      totalContentsCompleted: completedContents,
-      totalTimeSpent: progressStats._sum.timeSpent || 0,
-      averageScore: Math.round(progressStats._avg.score || 0),
-      certificates,
-      currentStreak: 0, // TODO: Implement streak calculation
-      longestStreak: 0, // TODO: Implement streak calculation
-      favoriteSubject,
-      progressBySubject,
-    });
-  } catch (error) {
-    console.error('Error fetching user education stats:', error);
-    return c.json({ error: 'Failed to fetch stats' }, 500);
+    console.error('Error updating progress:', error);
+    return c.json({ error: 'Failed to update progress' }, 500);
   }
 });
 

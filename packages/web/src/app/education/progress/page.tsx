@@ -1,6 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
+import { FeatureFlagService } from '@attaqwa/shared/feature-flags';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -137,6 +139,22 @@ const upcomingContent = [
 ];
 
 export default function ProgressPage() {
+  // Feature flag protection
+  if (!FeatureFlagService.canAccessEducationUI()) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-islamic-navy-800 mb-4">Learning Progress</h1>
+          <div className="bg-islamic-gold-50 border border-islamic-gold-200 rounded-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold text-islamic-gold-800 mb-2">🚧 Under Development</h2>
+            <p className="text-islamic-gold-700">Progress tracking system is being enhanced.</p>
+          </div>
+          <Link href="/"><Button className="bg-islamic-green-600 hover:bg-islamic-green-700">Return to Home</Button></Link>
+        </div>
+      </div>
+    );
+  }
+
   const [selectedTimeframe, setSelectedTimeframe] = useState<'week' | 'month' | 'year'>('month');
 
   const formatTime = (minutes: number) => {

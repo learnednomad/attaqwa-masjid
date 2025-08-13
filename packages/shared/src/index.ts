@@ -9,3 +9,6 @@ export * from './constants';
 
 // Export all utilities
 export * from './utils';
+
+// Export feature flags
+export * from './feature-flags';

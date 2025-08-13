@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { FeatureFlagService } from '@attaqwa/shared/feature-flags';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -135,6 +136,38 @@ const subjects = [
 ];
 
 export default function EducationPage() {
+  // Feature flag protection - disable education system
+  if (!FeatureFlagService.canAccessEducationUI()) {
+    return (
+      <div className="container mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto text-center">
+          <h1 className="text-4xl font-bold text-islamic-navy-800 mb-4">
+            Education System
+          </h1>
+          <div className="bg-islamic-gold-50 border border-islamic-gold-200 rounded-lg p-6 mb-6">
+            <h2 className="text-xl font-semibold text-islamic-gold-800 mb-2">
+              🚧 Under Development
+            </h2>
+            <p className="text-islamic-gold-700">
+              Our Islamic education platform is currently being enhanced to provide you with the best learning experience. 
+              Please check back soon for access to comprehensive Islamic lessons, quizzes, and progress tracking.
+            </p>
+          </div>
+          <div className="space-y-4">
+            <Link href="/">
+              <Button className="bg-islamic-green-600 hover:bg-islamic-green-700">
+                Return to Home
+              </Button>
+            </Link>
+            <p className="text-sm text-gray-500">
+              In the meantime, explore our prayer times, announcements, and community events.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   const [selectedAgeTier, setSelectedAgeTier] = useState<AgeTier | undefined>();
   const [searchQuery, setSearchQuery] = useState('');
 
