@@ -25,7 +25,12 @@ app.use('*', secureHeaders());
 app.use('*', cors({
   origin: [
     process.env.FRONTEND_URL || 'http://localhost:3000',
+    'http://localhost:3001', // Next.js development port
     'http://localhost:3002', // Alternative development port
+    'http://localhost:8081', // Expo mobile development
+    'http://localhost:19000', // Expo mobile development
+    'http://localhost:19002', // Expo mobile development
+    'http://localhost:19006', // Expo mobile development
   ],
   allowHeaders: ['Content-Type', 'Authorization'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
