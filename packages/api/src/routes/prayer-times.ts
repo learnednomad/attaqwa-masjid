@@ -72,7 +72,7 @@ async function fetchPrayerTimesFromAladhan(city: string, country: string, date: 
       asr: timings.Asr,
       maghrib: timings.Maghrib,
       isha: timings.Isha,
-      qibla: meta.qibla.direction,
+      qibla: meta.qibla?.direction || 58.5,
     };
   } catch (error) {
     console.error('Error fetching prayer times:', error);
