@@ -5,7 +5,6 @@ import { FeatureFlagService } from '@attaqwa/shared/feature-flags';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { 
   Plus,
@@ -172,14 +171,7 @@ export default function AdminContentPage() {
     return matchesSearch && matchesSubject && matchesStatus && matchesType;
   });
 
-  const getStatusColor = (status: string) => {
-    const colors = {
-      'Published': 'bg-green-100 text-green-800',
-      'Draft': 'bg-yellow-100 text-yellow-800',
-      'Archived': 'bg-gray-100 text-gray-800'
-    };
-    return colors[status as keyof typeof colors] || 'bg-gray-100 text-gray-800';
-  };
+  // Status color function removed to avoid duplication
 
   const getTypeIcon = (type: EducationContentType) => {
     const icons = {
@@ -196,11 +188,7 @@ export default function AdminContentPage() {
       <Icon className="h-4 w-4" />;
   };
 
-  const formatDuration = (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const remainingMinutes = minutes % 60;
-    return hours > 0 ? `${hours}h ${remainingMinutes}m` : `${minutes}m`;
-  };
+  // Utility function removed to avoid duplication with function below
 
   return (
     <div className="space-y-6">

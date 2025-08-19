@@ -13,7 +13,10 @@ import { prayerTimeRoutes } from './routes/prayer-times.js';
 import { authRoutes } from './routes/auth.js';
 import educationRoutes from './routes/education.js';
 import monitoringRoutes from './routes/monitoring.js';
+import { notificationRoutes } from './routes/notifications.js';
+import { donationRoutes } from './routes/donations.js';
 import { enhancedLogger, islamicMetrics, errorTracker, performanceMonitor, healthCheck } from './middleware/logging.js';
+import { apiVersioning, mobileCompression, fieldSelection, mobilePagination, mobileCache, mobileFormat, mobileRateLimit, mobileErrorHandler, networkAwareOptimization } from './middleware/mobile.js';
 
 const app = new Hono();
 
@@ -32,10 +35,22 @@ app.use('*', cors({
     'http://localhost:19002', // Expo mobile development
     'http://localhost:19006', // Expo mobile development
   ],
-  allowHeaders: ['Content-Type', 'Authorization'],
+  allowHeaders: ['Content-Type', 'Authorization', 'API-Version', 'Save-Data', 'Network-Information', 'Connection-Type'],
   allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   credentials: true,
+  exposeHeaders: ['API-Version', 'X-RateLimit-Limit', 'X-RateLimit-Remaining', 'X-Fields-Applied']
 }));
+
+// Mobile optimization middleware
+app.use('*', apiVersioning());
+app.use('*', mobileCompression());
+app.use('*', mobileRateLimit());
+app.use('*', networkAwareOptimization());
+app.use('*', mobileCache(300)); // 5 minute default cache
+app.use('*', mobilePagination());
+app.use('*', fieldSelection());
+app.use('*', mobileFormat());
+app.use('*', mobileErrorHandler());
 
 // Enhanced monitoring middleware
 app.use('*', enhancedLogger);
@@ -53,6 +68,8 @@ app.route('/api/events', eventRoutes);
 app.route('/api/prayer-times', prayerTimeRoutes);
 app.route('/api/education', educationRoutes);
 app.route('/api/monitoring', monitoringRoutes);
+app.route('/api/notifications', notificationRoutes);
+app.route('/api/donations', donationRoutes);
 
 // 404 handler
 app.notFound((c) => {

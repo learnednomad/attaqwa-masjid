@@ -141,3 +141,88 @@ export type AnnouncementType = 'general' | 'urgent' | 'event' | 'reminder';
 export type UserRole = 'admin' | 'user';
 export type DonationType = 'zakat' | 'sadaqah' | 'general';
 export type PaymentStatus = 'pending' | 'completed' | 'failed';
+
+// Enhanced UI Types for Premium Components
+export type ComponentVariant = 'default' | 'compact' | 'premium';
+export type ComponentSize = 'sm' | 'md' | 'lg' | 'xl';
+export type AnimationType = 'fade' | 'slide' | 'scale' | 'bounce' | 'none';
+export type ThemeMode = 'light' | 'dark' | 'auto';
+export type LanguagePreference = 'en' | 'ar' | 'both';
+
+// Prayer Times Enhancement
+export interface EnhancedPrayerTime extends PrayerTime {
+  icon?: string;
+  description?: string;
+  descriptionArabic?: string;
+  remainingTime?: string;
+  isNext?: boolean;
+  isPast?: boolean;
+}
+
+// UI Preferences
+export interface UserPreferences {
+  id: string;
+  userId: string;
+  theme: ThemeMode;
+  language: LanguagePreference;
+  showArabicText: boolean;
+  prayerNotifications: boolean;
+  eventReminders: boolean;
+  animationsEnabled: boolean;
+  fontSize: ComponentSize;
+  prayerTimeFormat: '12h' | '24h';
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Enhanced Educational Content
+export interface EducationProgress {
+  id: string;
+  userId: string;
+  contentId: string;
+  progress: number;
+  status: 'not_started' | 'in_progress' | 'completed' | 'paused';
+  timeSpent: number; // in minutes
+  lastAccessed: Date;
+  completedAt?: Date;
+  quizScores?: number[];
+  notes?: string;
+}
+
+// Interactive Quiz Types
+export interface QuizAttempt {
+  id: string;
+  userId: string;
+  quizId: string;
+  score: number;
+  totalQuestions: number;
+  timeSpent: number; // in seconds
+  answers: Array<{
+    questionId: string;
+    selectedAnswer: number;
+    isCorrect: boolean;
+    timeTaken: number;
+  }>;
+  completedAt: Date;
+}
+
+// Notification System
+export interface NotificationSettings {
+  prayerReminders: {
+    enabled: boolean;
+    minutesBefore: number;
+    playSound: boolean;
+  };
+  eventReminders: {
+    enabled: boolean;
+    hoursBefore: number;
+  };
+  educationProgress: {
+    enabled: boolean;
+    weeklyReports: boolean;
+  };
+  announcements: {
+    enabled: boolean;
+    urgentOnly: boolean;
+  };
+}

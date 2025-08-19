@@ -17,7 +17,9 @@ import {
   Info,
   CreditCard,
   Banknote,
-  Smartphone
+  Smartphone,
+  Phone,
+  Mail
 } from 'lucide-react';
 
 const donationCategories = [

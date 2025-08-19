@@ -464,7 +464,7 @@ export function MonitoringDashboard() {
                 <div className="text-3xl font-bold text-yellow-600 mb-2">
                   {metrics.performance.slowQueries}
                 </div>
-                <p className="text-sm text-gray-600">Queries > 1s (24h)</p>
+                <p className="text-sm text-gray-600">Queries {'>'}1s (24h)</p>
               </CardContent>
             </Card>
 

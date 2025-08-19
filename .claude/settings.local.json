@@ -28,7 +28,11 @@
       "Bash(npx prisma db push:*)",
       "Bash(npx prisma migrate dev:*)",
       "Bash(mv:*)",
-      "Bash(npx tsx:*)"
+      "Bash(npx tsx:*)",
+      "mcp__sequential-thinking__sequentialthinking",
+      "Bash(curl:*)",
+      "Bash(curl:*)",
+      "Bash(npx expo config:*)"
     ],
     "deny": []
   }

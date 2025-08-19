@@ -45,7 +45,9 @@ npm run test:coverage # Generate test coverage report
 - **Monitoring**: Comprehensive logging and analytics system
 - **Deployment**: Docker containers optimized for production
 
-### Monorepo Structure
+### Project Architecture
+
+#### Monorepo Structure (Web + API)
 ```
 packages/
 ├── web/                    # Next.js 15 frontend
@@ -67,6 +69,27 @@ packages/
         ├── types/         # TypeScript interfaces
         └── schemas/       # Zod validation schemas
 ```
+
+#### Mobile Application (Separate Repository)
+```
+mobile/
+└── AttaqwaMasjid/         # React Native/Expo mobile app
+    ├── src/
+    │   ├── components/    # Mobile UI components
+    │   ├── screens/       # Screen components
+    │   ├── services/      # API integration services
+    │   └── utils/         # Mobile-specific utilities
+    ├── assets/            # Images, fonts, icons
+    └── app.config.js      # Expo configuration
+```
+
+**Mobile App Features:**
+- **API Consumer Only**: Consumes REST APIs from Hono.js backend
+- **React Native/Expo**: Cross-platform iOS/Android development
+- **Prayer Times**: Real-time prayer schedules with notifications
+- **Educational Content**: Age-tier filtered Islamic learning content
+- **User Authentication**: JWT-based auth with secure token storage
+- **Offline Support**: Critical prayer times cached for offline access
 
 ### Key Features Implemented
 - **Islamic Educational System**: Age-tier content filtering, interactive quizzes, progress tracking

@@ -9,7 +9,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key-change-in-producti
 export interface UserPayload {
   id: string;
   email: string;
-  role: 'admin' | 'user';
+  role: 'admin' | 'moderator' | 'user';
 }
 
 export async function hashPassword(password: string): Promise<string> {

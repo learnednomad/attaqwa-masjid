@@ -23,8 +23,11 @@
     "api:dev": "turbo dev --filter=@attaqwa/api"
   },
   "devDependencies": {
-    "turbo": "^2.5.5",
     "prettier": "^3.6.2",
+    "turbo": "^2.5.5",
     "typescript": "^5"
+  },
+  "dependencies": {
+    "commander": "^14.0.0"
   }
 }

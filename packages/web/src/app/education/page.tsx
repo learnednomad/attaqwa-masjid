@@ -20,7 +20,12 @@ import {
 import { AgeTierFilter } from '@/components/features/education/AgeTierFilter';
 import { EducationContentCard } from '@/components/features/education/EducationContentCard';
 import { useEducationContent, useUserEducationStats } from '@/lib/hooks/useEducation';
+import { generateSEOMetadata } from '@/lib/seo';
+import { BreadcrumbStructuredData, MosqueStructuredData } from '@/components/seo/StructuredData';
 import type { AgeTier, IslamicSubject, DifficultyLevel, EducationContentType } from '@attaqwa/shared';
+
+// Note: Metadata export removed because this is a Client Component
+// SEO metadata should be handled in a layout.tsx or through other means for client components
 
 // Mock data for demonstration
 const mockEducationContent = [
@@ -136,35 +141,67 @@ const subjects = [
 ];
 
 export default function EducationPage() {
+  const breadcrumbs = [
+    { name: 'Home', url: '/' },
+    { name: 'Islamic Education', url: '/education' }
+  ];
+
   // Feature flag protection - disable education system
   if (!FeatureFlagService.canAccessEducationUI()) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <div className="max-w-2xl mx-auto text-center">
-          <h1 className="text-4xl font-bold text-islamic-navy-800 mb-4">
-            Education System
-          </h1>
-          <div className="bg-islamic-gold-50 border border-islamic-gold-200 rounded-lg p-6 mb-6">
-            <h2 className="text-xl font-semibold text-islamic-gold-800 mb-2">
-              🚧 Under Development
-            </h2>
-            <p className="text-islamic-gold-700">
-              Our Islamic education platform is currently being enhanced to provide you with the best learning experience. 
-              Please check back soon for access to comprehensive Islamic lessons, quizzes, and progress tracking.
-            </p>
-          </div>
-          <div className="space-y-4">
-            <Link href="/">
-              <Button className="bg-islamic-green-600 hover:bg-islamic-green-700">
-                Return to Home
-              </Button>
-            </Link>
-            <p className="text-sm text-gray-500">
-              In the meantime, explore our prayer times, announcements, and community events.
-            </p>
+      <>
+        {/* Structured Data for SEO */}
+        <BreadcrumbStructuredData items={breadcrumbs} />
+        <MosqueStructuredData />
+        
+        <div className="container mx-auto px-4 py-8">
+          <div className="max-w-2xl mx-auto text-center">
+            <header>
+              <h1 className="text-4xl font-bold text-islamic-navy-800 mb-4">
+                Islamic Education System
+              </h1>
+              <p className="text-lg text-islamic-navy-600 mb-6">
+                Comprehensive Islamic learning programs for all ages - Coming Soon
+              </p>
+            </header>
+            
+            <section className="bg-islamic-gold-50 border border-islamic-gold-200 rounded-lg p-6 mb-6" aria-labelledby="development-notice">
+              <h2 id="development-notice" className="text-xl font-semibold text-islamic-gold-800 mb-2">
+                🚧 Under Development
+              </h2>
+              <p className="text-islamic-gold-700 mb-4">
+                Our Islamic education platform is currently being enhanced to provide you with the best learning experience. 
+                Please check back soon for access to comprehensive Islamic lessons, quizzes, and progress tracking.
+              </p>
+              
+              <div className="text-left space-y-3">
+                <h3 className="font-semibold text-islamic-gold-800">Coming Features:</h3>
+                <ul className="list-disc list-inside text-sm text-islamic-gold-700 space-y-1">
+                  <li>Interactive Quran study with Tafsir</li>
+                  <li>Hadith collections and explanations</li>
+                  <li>Fiqh (Islamic jurisprudence) lessons</li>
+                  <li>Seerah (Prophet's biography) courses</li>
+                  <li>Age-appropriate Islamic curriculum</li>
+                  <li>Progress tracking and certificates</li>
+                  <li>Interactive quizzes and assessments</li>
+                  <li>Arabic language learning</li>
+                </ul>
+              </div>
+            </section>
+            
+            <nav className="space-y-4">
+              <Link href="/">
+                <Button className="bg-islamic-green-600 hover:bg-islamic-green-700">
+                  Return to Home
+                </Button>
+              </Link>
+              <p className="text-sm text-gray-500">
+                In the meantime, explore our prayer times, announcements, and community events.
+              </p>
+            </nav>
           </div>
         </div>
-      </div>
+      </>
     );
   }
 

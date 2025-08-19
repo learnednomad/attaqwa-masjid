@@ -1,5 +1,3 @@
-'use client';
-
 import { AnnouncementCard } from '@/components/features/announcements/announcement-card';
 import { EventCard } from '@/components/features/events/event-card';
 import { CalendarDownload } from '@/components/features/calendar/calendar-download';
@@ -9,6 +7,29 @@ import { Separator } from '@/components/ui/separator';
 import { ArrowRight, Calendar, Clock, Download } from 'lucide-react';
 import Link from 'next/link';
 import { Announcement, Event, Calendar as CalendarType, DailyPrayerTimes } from '@/types';
+import { generateSEOMetadata, generatePrayerTimesStructuredData, generateEventStructuredData, generateBreadcrumbStructuredData } from '@/lib/seo';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = generateSEOMetadata({
+  title: "Welcome to Masjid At-Taqwa - Islamic Community Center",
+  description: "Join Masjid At-Taqwa for daily prayers, Islamic education, community events, and spiritual guidance. Find prayer times, upcoming events, Ramadan activities, and Islamic learning resources.",
+  keywords: [
+    "masjid at-taqwa",
+    "islamic community center",
+    "daily prayers",
+    "prayer times",
+    "islamic education",
+    "muslim community",
+    "jummah prayers",
+    "ramadan calendar",
+    "eid celebrations",
+    "islamic events",
+    "quran classes",
+    "islamic studies"
+  ],
+  canonical: "/",
+  type: "website"
+});
 
 // Mock data - replace with actual API calls
 const mockAnnouncements: Announcement[] = [
@@ -89,133 +110,244 @@ const mockPrayerTimes: DailyPrayerTimes = {
 };
 
 export default function Home() {
+  // Generate structured data for the homepage with error handling
+  let prayerTimesStructuredData = null;
+  let eventsStructuredData: any[] = [];
+  let breadcrumbStructuredData = null;
+
+  try {
+    prayerTimesStructuredData = generatePrayerTimesStructuredData(mockPrayerTimes, mockPrayerTimes.date);
+  } catch (error) {
+    console.warn('Failed to generate prayer times structured data:', error);
+  }
+
+  try {
+    eventsStructuredData = mockEvents.map(event => generateEventStructuredData(event));
+  } catch (error) {
+    console.warn('Failed to generate events structured data:', error);
+  }
+
+  try {
+    breadcrumbStructuredData = generateBreadcrumbStructuredData([
+      { name: 'Home', url: '/' }
+    ]);
+  } catch (error) {
+    console.warn('Failed to generate breadcrumb structured data:', error);
+  }
+
   return (
-    <div className="container mx-auto px-4 py-8">
-      {/* Hero Section */}
-      <section className="islamic-pattern rounded-xl bg-gradient-to-r from-islamic-green-600 to-islamic-green-700 p-8 text-white md:p-12">
-        <div className="max-w-3xl">
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-            Welcome to Masjid At-Taqwa
-          </h1>
-          <p className="mb-6 text-lg opacity-90 md:text-xl">
-            A place of worship, community, and spiritual growth. Join us for daily prayers,
-            special events, and Islamic education in a welcoming environment.
-          </p>
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link href="/prayer-times">
-              <Button size="lg" variant="secondary" className="gap-2">
-                <Clock className="h-4 w-4" />
-                Prayer Times
-              </Button>
-            </Link>
-            <Link href="/events">
-              <Button size="lg" variant="outline" className="gap-2 border-white text-white hover:bg-white hover:text-islamic-green-600">
-                <Calendar className="h-4 w-4" />
-                Upcoming Events
-              </Button>
-            </Link>
+    <>
+      {/* Structured Data for SEO */}
+      {prayerTimesStructuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(prayerTimesStructuredData),
+          }}
+        />
+      )}
+      {eventsStructuredData.map((eventData, index) => (
+        <script
+          key={index}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(eventData),
+          }}
+        />
+      ))}
+      {breadcrumbStructuredData && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(breadcrumbStructuredData),
+          }}
+        />
+      )}
+
+      <div className="container mx-auto px-4 py-8">
+        {/* Hero Section */}
+        <section className="islamic-pattern rounded-xl bg-gradient-to-r from-islamic-green-600 to-islamic-green-700 p-8 text-white md:p-12" role="banner">
+          <div className="max-w-3xl">
+            <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+              Welcome to Masjid At-Taqwa
+            </h1>
+            <p className="mb-6 text-lg opacity-90 md:text-xl">
+              Your local Islamic community center providing daily prayer services, comprehensive Islamic education, and spiritual guidance. Join our welcoming Muslim community for Jummah prayers, Ramadan activities, Eid celebrations, and year-round Islamic learning programs.
+            </p>
+            <nav className="flex flex-col gap-3 sm:flex-row" role="navigation" aria-label="Quick actions">
+              <Link href="/prayer-times" aria-label="View today's prayer times schedule">
+                <Button size="lg" variant="secondary" className="gap-2">
+                  <Clock className="h-4 w-4" aria-hidden="true" />
+                  Prayer Times
+                </Button>
+              </Link>
+              <Link href="/events" aria-label="Browse upcoming Islamic events and activities">
+                <Button size="lg" variant="outline" className="gap-2 border-white text-white hover:bg-white hover:text-islamic-green-600">
+                  <Calendar className="h-4 w-4" aria-hidden="true" />
+                  Upcoming Events
+                </Button>
+              </Link>
+            </nav>
           </div>
-        </div>
-      </section>
+        </section>
 
       <div className="mt-12 grid gap-8 lg:grid-cols-3">
         {/* Main Content */}
-        <div className="lg:col-span-2">
+        <article className="lg:col-span-2">
           {/* Recent Announcements */}
-          <section className="mb-12">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-islamic-navy-800">Recent Announcements</h2>
-              <Link href="/announcements">
+          <section className="mb-12" aria-labelledby="announcements-heading">
+            <header className="mb-6 flex items-center justify-between">
+              <h2 id="announcements-heading" className="text-2xl font-bold text-islamic-navy-800">
+                Recent Islamic Community Announcements
+              </h2>
+              <Link href="/announcements" aria-label="View all mosque announcements">
                 <Button variant="outline" size="sm" className="gap-1">
                   View All
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-3 w-3" aria-hidden="true" />
                 </Button>
               </Link>
-            </div>
-            <div className="grid gap-6">
+            </header>
+            <div className="grid gap-6" role="feed" aria-label="Latest announcements">
               {mockAnnouncements.map((announcement) => (
                 <AnnouncementCard key={announcement.id} announcement={announcement} />
               ))}
             </div>
+            <p className="mt-4 text-sm text-islamic-navy-600">
+              Stay updated with important mosque announcements, Eid celebrations, Ramadan schedules, and community activities.
+            </p>
           </section>
 
           {/* Upcoming Events */}
-          <section className="mb-12">
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-islamic-navy-800">Upcoming Events</h2>
-              <Link href="/events">
+          <section className="mb-12" aria-labelledby="events-heading">
+            <header className="mb-6 flex items-center justify-between">
+              <h2 id="events-heading" className="text-2xl font-bold text-islamic-navy-800">
+                Upcoming Islamic Events & Activities
+              </h2>
+              <Link href="/events" aria-label="Browse all Islamic events and programs">
                 <Button variant="outline" size="sm" className="gap-1">
                   View All
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-3 w-3" aria-hidden="true" />
                 </Button>
               </Link>
-            </div>
-            <div className="grid gap-6">
+            </header>
+            <div className="grid gap-6" role="list" aria-label="Upcoming events">
               {mockEvents.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
             </div>
+            <p className="mt-4 text-sm text-islamic-navy-600">
+              Join our Islamic community events including Eid prayers, Ramadan programs, educational workshops, and family gatherings.
+            </p>
           </section>
 
           {/* Calendar Downloads */}
-          <section>
-            <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-islamic-navy-800">Islamic Calendar</h2>
-              <Link href="/calendar">
+          <section aria-labelledby="calendar-heading">
+            <header className="mb-6 flex items-center justify-between">
+              <h2 id="calendar-heading" className="text-2xl font-bold text-islamic-navy-800">
+                Islamic Calendar Downloads
+              </h2>
+              <Link href="/calendar" aria-label="Download all Islamic calendar resources">
                 <Button variant="outline" size="sm" className="gap-1">
-                  <Download className="h-3 w-3" />
+                  <Download className="h-3 w-3" aria-hidden="true" />
                   All Downloads
                 </Button>
               </Link>
-            </div>
-            <div className="grid gap-4">
+            </header>
+            <div className="grid gap-4" role="list" aria-label="Available Islamic calendars">
               {mockCalendars.map((calendar) => (
                 <CalendarDownload key={calendar.id} calendar={calendar} compact />
               ))}
             </div>
+            <p className="mt-4 text-sm text-islamic-navy-600">
+              Download Ramadan calendars, prayer time schedules, and Islamic holiday dates for your convenience.
+            </p>
           </section>
-        </div>
+        </article>
 
         {/* Sidebar */}
-        <div className="space-y-8">
+        <aside className="space-y-8" role="complementary" aria-label="Prayer times and community information">
           {/* Prayer Times Widget */}
-          <PrayerTimesWidget 
-            prayerTimes={mockPrayerTimes} 
-            currentPrayer="dhuhr"
-          />
+          <section aria-labelledby="prayer-times-sidebar">
+            <h3 id="prayer-times-sidebar" className="sr-only">Daily Prayer Times</h3>
+            <PrayerTimesWidget 
+              prayerTimes={mockPrayerTimes} 
+              currentPrayer="dhuhr"
+            />
+          </section>
 
           {/* Quick Actions */}
-          <div className="rounded-lg border bg-card p-6">
-            <h3 className="mb-4 font-semibold text-islamic-navy-800">Quick Actions</h3>
-            <div className="space-y-3">
-              <Link href="/donate" className="block">
+          <section className="rounded-lg border bg-card p-6" aria-labelledby="quick-actions-heading">
+            <h3 id="quick-actions-heading" className="mb-4 font-semibold text-islamic-navy-800">
+              Quick Actions
+            </h3>
+            <nav className="space-y-3" role="navigation" aria-label="Quick access links">
+              <Link href="/donate" className="block" aria-label="Make a donation to support the mosque">
                 <Button className="w-full justify-start gap-2" variant="outline">
-                  💚 Make a Donation
+                  <span aria-hidden="true">💚</span> Make a Donation (Zakat & Sadaqah)
                 </Button>
               </Link>
-              <Link href="/contact" className="block">
+              <Link href="/contact" className="block" aria-label="Contact mosque administration">
                 <Button className="w-full justify-start gap-2" variant="outline">
-                  📧 Contact Us
+                  <span aria-hidden="true">📧</span> Contact Us
                 </Button>
               </Link>
-              <Link href="/about" className="block">
+              <Link href="/about" className="block" aria-label="Learn about our Islamic center">
                 <Button className="w-full justify-start gap-2" variant="outline">
-                  🏛️ About the Mosque
+                  <span aria-hidden="true">🏛️</span> About the Mosque
                 </Button>
               </Link>
-            </div>
-          </div>
+              <Link href="/education" className="block" aria-label="Browse Islamic education programs">
+                <Button className="w-full justify-start gap-2" variant="outline">
+                  <span aria-hidden="true">📚</span> Islamic Education
+                </Button>
+              </Link>
+            </nav>
+          </section>
 
           {/* Community Notice */}
-          <div className="rounded-lg bg-islamic-gold-50 border border-islamic-gold-200 p-6">
-            <h3 className="mb-2 font-semibold text-islamic-gold-800">Community Notice</h3>
-            <p className="text-sm text-islamic-gold-700">
-              Please ensure to follow mosque etiquette during prayers. 
-              Remove shoes before entering the prayer hall and maintain silence during services.
-            </p>
-          </div>
-        </div>
+          <section className="rounded-lg bg-islamic-gold-50 border border-islamic-gold-200 p-6" aria-labelledby="community-notice-heading">
+            <h3 id="community-notice-heading" className="mb-2 font-semibold text-islamic-gold-800">
+              Mosque Etiquette & Guidelines
+            </h3>
+            <div className="text-sm text-islamic-gold-700 space-y-2">
+              <p>
+                Please observe Islamic etiquette during prayers:
+              </p>
+              <ul className="list-disc list-inside space-y-1">
+                <li>Remove shoes before entering the prayer hall</li>
+                <li>Maintain silence during prayer services</li>
+                <li>Dress modestly and appropriately</li>
+                <li>Turn off mobile devices during prayers</li>
+              </ul>
+              <p className="mt-3">
+                <strong>Jummah Prayer:</strong> Fridays at 1:15 PM - Arrive early for the best experience.
+              </p>
+            </div>
+          </section>
+
+          {/* Islamic Resources */}
+          <section className="rounded-lg border bg-card p-6" aria-labelledby="resources-heading">
+            <h3 id="resources-heading" className="mb-4 font-semibold text-islamic-navy-800">
+              Islamic Resources
+            </h3>
+            <nav className="space-y-3" role="navigation" aria-label="Islamic learning resources">
+              <Link href="/education/quran" className="block text-sm text-islamic-navy-600 hover:text-islamic-green-600">
+                📖 Quran Study & Tafsir
+              </Link>
+              <Link href="/education/hadith" className="block text-sm text-islamic-navy-600 hover:text-islamic-green-600">
+                📚 Hadith Collections
+              </Link>
+              <Link href="/prayer-times/qibla" className="block text-sm text-islamic-navy-600 hover:text-islamic-green-600">
+                🧭 Qibla Direction
+              </Link>
+              <Link href="/calendar/hijri" className="block text-sm text-islamic-navy-600 hover:text-islamic-green-600">
+                🗓️ Islamic Calendar
+              </Link>
+            </nav>
+          </section>
+        </aside>
       </div>
     </div>
+    </>
   );
 }

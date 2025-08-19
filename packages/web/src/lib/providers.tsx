@@ -1,9 +1,21 @@
 'use client';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { AuthProvider } from '@/lib/hooks/useAuth';
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import DevTools with no SSR and error boundary
+const ReactQueryDevtools = dynamic(
+  () =>
+    import('@tanstack/react-query-devtools').then((d) => ({
+      default: d.ReactQueryDevtools,
+    })),
+  {
+    ssr: false,
+    loading: () => null,
+  }
+);
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -32,7 +44,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       <AuthProvider>
         {children}
         {process.env.NODE_ENV === 'development' && (
-          <ReactQueryDevtools initialIsOpen={false} />
+          <Suspense fallback={null}>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Suspense>
         )}
       </AuthProvider>
     </QueryClientProvider>
