@@ -34,6 +34,10 @@
       "Bash(curl:*)",
       "Bash(npx expo config:*)"
     ],
-    "deny": []
+    "deny": [],
+    "additionalDirectories": [
+      "/Users/saninabil/WebstormProjects",
+      "/Users/saninabil"
+    ]
   }
 }
