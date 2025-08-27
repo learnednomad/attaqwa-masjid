@@ -65,6 +65,15 @@ export interface DailyPrayerTimes {
   maghrib: string;
   isha: string;
   qibla: number;
+  // Iqama times (prayer congregation times)
+  iqama?: {
+    fajr: string;
+    dhuhr: string;
+    asr: string;
+    maghrib: string; // Usually +5 minutes after Maghrib
+    isha: string;
+  };
+  jummah?: string[]; // Multiple Jummah prayer times
 }
 
 export interface Donation {

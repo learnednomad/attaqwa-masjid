@@ -20,7 +20,10 @@
     "typecheck": "turbo typecheck",
     "clean": "turbo clean",
     "web:dev": "turbo dev --filter=@attaqwa/web",
-    "api:dev": "turbo dev --filter=@attaqwa/api"
+    "api:dev": "turbo dev --filter=@attaqwa/api",
+    "monitor:prayer-times": "cd packages/api && npx tsx src/scripts/prayer-times-monitor.ts",
+    "monitor:prayer-times:test": "cd packages/api && npx tsx src/scripts/prayer-times-monitor.ts test",
+    "monitor:prayer-times:status": "cd packages/api && npx tsx src/scripts/prayer-times-monitor.ts status"
   },
   "devDependencies": {
     "prettier": "^3.6.2",

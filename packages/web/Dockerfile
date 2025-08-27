@@ -12,6 +12,7 @@ COPY package.json package-lock.json* ./
 COPY packages/web/package.json ./packages/web/
 COPY packages/shared/package.json ./packages/shared/
 COPY turbo.json ./
+COPY tsconfig.json ./
 
 # Install dependencies
 RUN npm ci --frozen-lockfile
@@ -19,6 +20,10 @@ RUN npm ci --frozen-lockfile
 # Copy source code
 COPY packages/web ./packages/web
 COPY packages/shared ./packages/shared
+
+# Ensure the web package can find the root tsconfig.json at the correct relative path
+# The web/tsconfig.json extends ../../tsconfig.json, so we need the root tsconfig.json 
+# to be accessible from /app/packages/web/ as ../../tsconfig.json
 
 # Development stage
 FROM base AS development

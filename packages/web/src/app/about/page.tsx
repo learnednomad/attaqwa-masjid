@@ -172,20 +172,32 @@ export default function AboutPage() {
             <h2 className="text-3xl font-bold text-islamic-navy-800 mb-6">Our History</h2>
             <div className="space-y-4 text-gray-700 leading-relaxed">
               <p>
-                Masjid At-Taqwa was established with the vision of creating a spiritual home 
-                for Muslims in our community. Founded on the principles of authentic Islamic 
-                teachings, we have grown to become a center of worship, education, and 
-                community support.
+                <strong>Masjid At-Taqwa was founded in 2005</strong> through the efforts of a few dedicated brothers 
+                who were looking for a location to begin a masjid through which they would be able to spread 
+                the religion of Islam and nurture a community.
               </p>
               <p>
-                Our name "At-Taqwa" comes from the Arabic word meaning "God-consciousness" 
-                or "piety," reflecting our commitment to maintaining awareness of Allah (SWT) 
-                in all aspects of life and community service.
+                It began as a residential home which was slowly renovated and converted. With the help of Allah 
+                and the dedication of many brothers and sisters, the daily salah as well as a small school 
+                for the children and youth began to flourish.
               </p>
               <p>
-                Over the years, we have served thousands of community members through 
-                our educational programs, community events, and spiritual guidance, 
-                always striving to follow the example of Prophet Muhammad (peace be upon him).
+                As the community grew, the demands and needs also expanded, which led to the slow development 
+                of the building and its amenities. The one building masjid was expanded with another building 
+                which transitioned the women's section therein to accommodate the growing number of attendees. 
+                This also allowed the expansion of the school and classes, as well as the purchasing of surrounding 
+                lands to allow recreational spaces.
+              </p>
+              <p>
+                Due to the death of a community member, there were issues which arose demanding the need for 
+                further facilitations for the community. It was then, by the grace of Allah, that the second 
+                Project of Masjid At-Taqwa was undertaken: <strong>a cemetery and funeral home for the Muslims</strong>.
+              </p>
+              <p>
+                After the purchase, the burial of the first Muslims were facilitated and it is currently going 
+                through further development. Soon after, due to further growing demands of masjid and school space, 
+                the plans have been passed for a <strong>new masjid building</strong> and it is currently going through 
+                the first initial phases for its completion.
               </p>
             </div>
           </div>

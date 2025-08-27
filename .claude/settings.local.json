@@ -32,7 +32,13 @@
       "mcp__sequential-thinking__sequentialthinking",
       "Bash(curl:*)",
       "Bash(curl:*)",
-      "Bash(npx expo config:*)"
+      "Bash(npx expo config:*)",
+      "Bash(git push:*)",
+      "mcp__coolify__applications",
+      "Bash(docker compose:*)",
+      "mcp__mcp-server-firecrawl__firecrawl_scrape",
+      "mcp__filesystem__write_file",
+      "Bash(git log:*)"
     ],
     "deny": [],
     "additionalDirectories": [

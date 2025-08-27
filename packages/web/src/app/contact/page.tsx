@@ -4,7 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { MapPin, Phone, Mail, Clock, Users, Send, MessageSquare } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, Users, Send, MessageSquare, Facebook, Youtube } from 'lucide-react';
 import { MOSQUE_INFO } from '@attaqwa/shared';
 import { generateSEOMetadata } from '@/lib/seo';
 import type { Metadata } from 'next';
@@ -29,46 +29,74 @@ export const metadata: Metadata = generateSEOMetadata({
 });
 
 const contactInfo = {
-  address: "123 Islamic Center Drive, Your City, State 12345",
-  phone: "(555) 123-4567",
-  email: "info@attaqwa.org",
-  fax: "(555) 123-4568",
+  address: "2674 Woodwin Rd, Doraville, GA 30360",
+  phone: "(678) 896-9257",
+  email: "Mohammad30360@hotmail.com",
+  schoolEmail: "Attaqwa.du@gmail.com",
   hours: {
     office: "Monday - Friday: 9:00 AM - 5:00 PM",
     prayers: "Daily prayers open to all",
-    friday: "Jummah: 1:15 PM (Office closed 12:30-2:00 PM)",
+    friday: "Jummah: 2:00 PM & 2:30 PM (Office closed 12:30-2:00 PM)",
     weekend: "Saturday - Sunday: Limited office hours"
+  },
+  social: {
+    facebook: "https://www.facebook.com/MasjidAttaqwa2674WoodwinRd",
+    youtube: "https://www.youtube.com/@MasjidAttaqwa2674"
   }
 };
 
 const staff = [
   {
-    name: "Imam Abdullah Rahman",
+    name: "Imam Mohammad Zahirul Islam",
     title: "Chief Imam",
-    email: "imam@attaqwa.org",
-    phone: "(555) 123-4567 ext. 101",
-    responsibilities: ["Religious guidance", "Nikah ceremonies", "Janazah services", "Religious counseling"]
+    email: "Mohammad30360@hotmail.com",
+    phone: "(678) 896-9257",
+    education: [
+      "MA in Islamic Studies",
+      "Completed memorization of the Qur'an at Masjid An-Nabawi",
+      "Studied Alimiyyah program with Shaykh Abdul Ghaffar from Georgia Islamic Institute"
+    ],
+    experience: [
+      "Former Imam and teacher at Masjid Darus-Salam in GA, USA"
+    ],
+    languages: ["Bengali", "English"],
+    classes: [
+      "Tafseer class (English & Bengali)",
+      "Qur'an & Islamic Studies for Adults (English & Bengali)",
+      "Tahfeedhul Qur'an teacher"
+    ],
+    responsibilities: ["Religious guidance", "Nikah ceremonies", "Janazah services", "Religious counseling", "Community leadership"]
   },
   {
-    name: "Sister Fatima Al-Zahra",
-    title: "Education Director",
-    email: "education@attaqwa.org",
-    phone: "(555) 123-4567 ext. 102",
-    responsibilities: ["Islamic education programs", "Youth activities", "Women's programs", "Children's classes"]
+    name: "Imam Abdullah Khan",
+    title: "Imam & Teacher",
+    email: "Mohammad30360@hotmail.com",
+    phone: "(678) 896-9257",
+    education: [
+      "BA in the Faculty of Shari'ah from University of Madinah",
+      "MA in the Faculty of Qur'an from University of Madinah",
+      "Completed memorization of the Qur'an from Masjid Miqat in Madinah",
+      "Received Ijaazah from Masjid An-Nabawi"
+    ],
+    experience: [
+      "Former Imaam of Masjid Al-'Alawah in Madinah",
+      "Former Imaam of Masjid in Madinah"
+    ],
+    languages: ["Bengali", "English", "Arabic"],
+    classes: [
+      "Tafseer class (Arabic)",
+      "Shari'ah & Aqeedah class (Arabic; online)",
+      "Tahfeedhul Qur'an teacher",
+      "Arabic language teacher"
+    ],
+    responsibilities: ["Islamic law guidance", "Arabic instruction", "Quran memorization supervision", "Advanced Islamic studies"]
   },
   {
-    name: "Brother Omar Hassan",
-    title: "Community Coordinator",
-    email: "community@attaqwa.org",
-    phone: "(555) 123-4567 ext. 103",
-    responsibilities: ["Events planning", "Volunteer coordination", "Community outreach", "Social services"]
-  },
-  {
-    name: "Sister Aisha Malik",
-    title: "Administrative Assistant",
-    email: "admin@attaqwa.org",
-    phone: "(555) 123-4567 ext. 104",
-    responsibilities: ["General inquiries", "Facility rentals", "Donations", "Administrative support"]
+    name: "School Administration",
+    title: "Education Department",
+    email: "Attaqwa.du@gmail.com",
+    phone: "(678) 896-9257",
+    responsibilities: ["Islamic education programs", "Weekend classes", "Homeschooling coordination", "Student registration", "Educational resources"]
   }
 ];
 
@@ -201,7 +229,6 @@ export default function ContactPage() {
                 <div>
                   <p className="font-medium text-islamic-navy-800">Phone</p>
                   <p className="text-sm text-islamic-navy-600">{contactInfo.phone}</p>
-                  <p className="text-sm text-islamic-navy-600">Fax: {contactInfo.fax}</p>
                 </div>
               </div>
               
@@ -209,7 +236,8 @@ export default function ContactPage() {
                 <Mail className="mt-1 h-5 w-5 text-islamic-green-600 flex-shrink-0" />
                 <div>
                   <p className="font-medium text-islamic-navy-800">Email</p>
-                  <p className="text-sm text-islamic-navy-600">{contactInfo.email}</p>
+                  <p className="text-sm text-islamic-navy-600">Imam: {contactInfo.email}</p>
+                  <p className="text-sm text-islamic-navy-600">School: {contactInfo.schoolEmail}</p>
                 </div>
               </div>
             </CardContent>
@@ -243,6 +271,44 @@ export default function ContactPage() {
             </CardContent>
           </Card>
 
+          {/* Social Media */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Follow Us</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center gap-3">
+                <Facebook className="h-5 w-5 text-blue-600" />
+                <div>
+                  <p className="font-medium text-islamic-navy-800">Facebook</p>
+                  <a 
+                    href={contactInfo.social.facebook}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-blue-600 hover:underline"
+                  >
+                    Masjid At-Taqwa Atlanta
+                  </a>
+                </div>
+              </div>
+              
+              <div className="flex items-center gap-3">
+                <Youtube className="h-5 w-5 text-red-600" />
+                <div>
+                  <p className="font-medium text-islamic-navy-800">YouTube</p>
+                  <a 
+                    href={contactInfo.social.youtube}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm text-red-600 hover:underline"
+                  >
+                    Masjid At-Taqwa Channel
+                  </a>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
           {/* Emergency Contact */}
           <Card className="bg-islamic-gold-50 border-islamic-gold-200">
             <CardContent className="p-4">
@@ -250,8 +316,8 @@ export default function ContactPage() {
               <p className="text-sm text-islamic-gold-700 mb-3">
                 For urgent religious matters (Janazah services, emergencies):
               </p>
-              <p className="font-medium text-islamic-gold-800">(555) 123-HELP (4357)</p>
-              <p className="text-sm text-islamic-gold-600">Available 24/7</p>
+              <p className="font-medium text-islamic-gold-800">{contactInfo.phone}</p>
+              <p className="text-sm text-islamic-gold-600">Please call for urgent matters</p>
             </CardContent>
           </Card>
         </div>
@@ -290,6 +356,62 @@ export default function ContactPage() {
                     <Phone className="h-4 w-4 text-islamic-navy-400" />
                     <span className="text-islamic-navy-600">{member.phone}</span>
                   </div>
+                  
+                  {member.education && (
+                    <div>
+                      <p className="text-sm font-medium text-islamic-navy-800 mb-2">Education:</p>
+                      <ul className="text-sm text-islamic-navy-600 space-y-1">
+                        {member.education.map((edu, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
+                            <span className="w-1 h-1 bg-islamic-gold-600 rounded-full"></span>
+                            {edu}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {member.experience && (
+                    <div>
+                      <p className="text-sm font-medium text-islamic-navy-800 mb-2">Experience:</p>
+                      <ul className="text-sm text-islamic-navy-600 space-y-1">
+                        {member.experience.map((exp, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
+                            <span className="w-1 h-1 bg-islamic-green-600 rounded-full"></span>
+                            {exp}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+
+                  {member.languages && (
+                    <div>
+                      <p className="text-sm font-medium text-islamic-navy-800 mb-2">Languages:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {member.languages.map((lang, idx) => (
+                          <span key={idx} className="text-xs px-2 py-1 bg-islamic-green-100 text-islamic-green-800 rounded-full">
+                            {lang}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {member.classes && (
+                    <div>
+                      <p className="text-sm font-medium text-islamic-navy-800 mb-2">Classes & Teaching:</p>
+                      <ul className="text-sm text-islamic-navy-600 space-y-1">
+                        {member.classes.map((cls, idx) => (
+                          <li key={idx} className="flex items-center gap-2">
+                            <span className="w-1 h-1 bg-islamic-navy-600 rounded-full"></span>
+                            {cls}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
                   <div>
                     <p className="text-sm font-medium text-islamic-navy-800 mb-2">Responsibilities:</p>
                     <ul className="text-sm text-islamic-navy-600 space-y-1">
@@ -362,7 +484,7 @@ export default function ContactPage() {
               <div className="text-center text-gray-500">
                 <MapPin className="mx-auto mb-2 h-8 w-8" />
                 <p>Interactive map will be displayed here</p>
-                <p className="text-sm">123 Islamic Center Drive, Your City, State 12345</p>
+                <p className="text-sm">{contactInfo.address}</p>
               </div>
             </div>
           </CardContent>

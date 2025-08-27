@@ -1,8 +1,8 @@
 # Multi-stage Dockerfile for Hono.js API service
-FROM node:18-alpine AS base
+FROM node:22-alpine AS base
 
 # Install dependencies for native modules
-RUN apk add --no-cache libc6-compat
+RUN apk add --no-cache libc6-compat openssl
 
 # Set working directory
 WORKDIR /app
@@ -25,8 +25,12 @@ COPY packages/db ./packages/db
 # Development stage
 FROM base AS development
 
-# Install development dependencies
+# Install curl for health checks and development dependencies
+RUN apk add --no-cache curl
 RUN npm install -g nodemon tsx
+
+# Generate Prisma client for development
+RUN cd packages/db && npx prisma generate
 
 # Expose port
 EXPOSE 3001
@@ -91,7 +95,7 @@ EXPOSE 3001
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3001/api/health || exit 1
+  CMD curl -f http://localhost:3001/health || exit 1
 
 # Set environment
 ENV NODE_ENV=production

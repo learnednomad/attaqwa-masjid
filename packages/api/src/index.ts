@@ -10,6 +10,7 @@ import 'dotenv/config';
 import { announcementRoutes } from './routes/announcements.js';
 import { eventRoutes } from './routes/events.js';
 import { prayerTimeRoutes } from './routes/prayer-times.js';
+import { prayerTimesAdminRoutes } from './routes/prayer-times-admin.js';
 import { authRoutes } from './routes/auth.js';
 import educationRoutes from './routes/education.js';
 import monitoringRoutes from './routes/monitoring.js';
@@ -17,6 +18,11 @@ import { notificationRoutes } from './routes/notifications.js';
 import { donationRoutes } from './routes/donations.js';
 import { enhancedLogger, islamicMetrics, errorTracker, performanceMonitor, healthCheck } from './middleware/logging.js';
 import { apiVersioning, mobileCompression, fieldSelection, mobilePagination, mobileCache, mobileFormat, mobileRateLimit, mobileErrorHandler, networkAwareOptimization } from './middleware/mobile.js';
+import { createRouteProtection } from './config/route-protection.js';
+import educationAgeFilteringRoutes from './routes/education-age-filtering.js';
+import islamicEducationCalendarRoutes from './routes/islamic-education-calendar.js';
+import quranMemorizationRoutes from './routes/quran-memorization.js';
+import halaqahSessionRoutes from './routes/halaqah-sessions.js';
 
 const app = new Hono();
 
@@ -58,6 +64,9 @@ app.use('*', islamicMetrics);
 app.use('*', errorTracker);
 app.use('*', performanceMonitor);
 
+// Global route protection based on configuration
+app.use('/api/*', createRouteProtection());
+
 // Enhanced health check with Islamic features
 app.get('/health', healthCheck);
 
@@ -66,7 +75,12 @@ app.route('/api/auth', authRoutes);
 app.route('/api/announcements', announcementRoutes);
 app.route('/api/events', eventRoutes);
 app.route('/api/prayer-times', prayerTimeRoutes);
+app.route('/api/admin/prayer-times', prayerTimesAdminRoutes);
 app.route('/api/education', educationRoutes);
+app.route('/api/education-age', educationAgeFilteringRoutes);
+app.route('/api/islamic-calendar', islamicEducationCalendarRoutes);
+app.route('/api/quran', quranMemorizationRoutes);
+app.route('/api/halaqah', halaqahSessionRoutes);
 app.route('/api/monitoring', monitoringRoutes);
 app.route('/api/notifications', notificationRoutes);
 app.route('/api/donations', donationRoutes);

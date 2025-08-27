@@ -31,14 +31,14 @@ export const metadata: Metadata = generateSEOMetadata({
   type: "website"
 });
 
-// Mock data - replace with actual API calls
+// Real data from Masjid At-Taqwa website
 const mockAnnouncements: Announcement[] = [
   {
     id: '1',
-    title: 'Eid ul-Fitr 2025 Celebration',
-    content: '<p>Join us for Eid ul-Fitr prayers and celebration. <strong>First prayer:</strong> 8:00 AM, <strong>Second prayer:</strong> 9:30 AM. Outdoor prayer arrangements available. Please bring your prayer rugs.</p><ul><li>Family-friendly activities</li><li>Community lunch following prayers</li><li>Parking available at nearby locations</li></ul>',
+    title: 'Eid ul-Fitr Sunday March 30, 2025',
+    content: '<p>Insha\'Allah Eid will be on Sunday March 30, 2025. <strong>Zakat ul Fitr $10/person</strong> and should be paid prior to Eid ul Fitr Salah.</p><p>As always, 1st Salah, we will be praying outside in the parking lot. 2nd Salah will be inside the masjid.</p><ul><li><strong>1st Salah:</strong> 8:30am</li><li><strong>2nd Salah:</strong> 9:30am</li><li>We are humbly requesting everyone to come in a group instead of individual cars due to limited parking space</li><li>Please follow the direction of our volunteer brothers for parking</li></ul>',
     date: new Date('2025-03-30'),
-    time: '8:00 AM & 9:30 AM',
+    time: '8:30 AM & 9:30 AM',
     isActive: true,
     isArchived: false,
     createdAt: new Date('2025-03-15'),
@@ -46,10 +46,21 @@ const mockAnnouncements: Announcement[] = [
   },
   {
     id: '2',
-    title: 'Ramadan Taraweh Prayers',
-    content: '<p>Daily Taraweh prayers during Ramadan. Join us for these special evening prayers.</p>',
+    title: 'Eid-Al-Adha Friday June 6th, 2025',
+    content: '<p>Insha\'Allah Eid-Al-Adha will be on Friday June 6th, 2025.</p><p>As always, 1st Salah, we will be praying outside in the parking lot. 2nd Salah will be inside the masjid.</p><ul><li><strong>1st Salah:</strong> 8:00am</li><li><strong>2nd Salah:</strong> 9:00am</li><li>We are humbly requesting everyone to come in a group instead of individual cars due to limited parking space</li><li>Please follow the direction of our volunteer brothers for parking</li></ul>',
+    date: new Date('2025-06-06'),
+    time: '8:00 AM & 9:00 AM',
+    isActive: true,
+    isArchived: false,
+    createdAt: new Date('2025-03-15'),
+    updatedAt: new Date('2025-03-20'),
+  },
+  {
+    id: '3',
+    title: 'Ramadan Mubarak - Tarawee and Daily Programs',
+    content: '<p><strong>RAMADAN MUBARAK!!!</strong> InshaAllah, we will have our 1st Tarawee tonight after Isha and it will be 20 rakhat.</p><ul><li>Daily brief tafseer and dua will start before maghrib</li><li>Daily Tahajjud will start at 4:45am</li><li>Community iftar will be served throughout the month of ramadan</li><li><strong>Tarawee Prayer:</strong> 20 rakhat after Isha prayer</li></ul>',
     date: new Date('2025-02-28'),
-    time: '9:00 PM',
+    time: 'After Isha & 4:45 AM',
     isActive: true,
     isArchived: false,
     createdAt: new Date('2025-02-20'),
@@ -63,20 +74,52 @@ const mockEvents: Event[] = [
     title: 'Eid ul-Fitr 2025',
     description: 'Celebrate the end of Ramadan with our community. Multiple prayer times available with outdoor arrangements.',
     date: new Date('2025-03-30'),
-    startTime: '8:00 AM',
+    startTime: '8:30 AM',
     endTime: '11:00 AM',
     location: 'Masjid At-Taqwa',
     isIndoor: true,
     isOutdoor: true,
     prayerTimes: [
-      { name: '1st Prayer', time: '8:00 AM', location: 'Main Hall' },
-      { name: '2nd Prayer', time: '9:30 AM', location: 'Outdoor Area' },
+      { name: '1st Prayer', time: '8:30 AM', location: 'Parking Lot (Outdoor)' },
+      { name: '2nd Prayer', time: '9:30 AM', location: 'Inside Masjid' },
     ],
     zakatInfo: {
       amount: 10,
       currency: 'USD',
       description: 'per person',
     },
+    isActive: true,
+    createdAt: new Date('2025-03-01'),
+    updatedAt: new Date('2025-03-15'),
+  },
+  {
+    id: '2',
+    title: 'Eid-Al-Adha 2025',
+    description: 'Join us for Eid-Al-Adha prayers and celebration. Multiple prayer times with outdoor and indoor arrangements.',
+    date: new Date('2025-06-06'),
+    startTime: '8:00 AM',
+    endTime: '10:30 AM',
+    location: 'Masjid At-Taqwa',
+    isIndoor: true,
+    isOutdoor: true,
+    prayerTimes: [
+      { name: '1st Prayer', time: '8:00 AM', location: 'Parking Lot (Outdoor)' },
+      { name: '2nd Prayer', time: '9:00 AM', location: 'Inside Masjid' },
+    ],
+    isActive: true,
+    createdAt: new Date('2025-03-01'),
+    updatedAt: new Date('2025-03-15'),
+  },
+  {
+    id: '3',
+    title: 'Hifz Graduation 2025',
+    description: 'Celebrating the achievement of students who have completed memorization of the Holy Quran.',
+    date: new Date('2025-06-15'),
+    startTime: '6:00 PM',
+    endTime: '8:00 PM',
+    location: 'Masjid At-Taqwa',
+    isIndoor: true,
+    isOutdoor: false,
     isActive: true,
     createdAt: new Date('2025-03-01'),
     updatedAt: new Date('2025-03-15'),
@@ -99,14 +142,22 @@ const mockCalendars: CalendarType[] = [
 ];
 
 const mockPrayerTimes: DailyPrayerTimes = {
-  date: '2025-07-20',
-  fajr: '4:32 AM',
-  sunrise: '6:15 AM',
-  dhuhr: '1:15 PM',
-  asr: '5:45 PM',
-  maghrib: '8:20 PM',
-  isha: '9:45 PM',
+  date: '2025-08-26',
+  fajr: '5:41 AM',
+  sunrise: '7:07 AM', 
+  dhuhr: '1:40 PM',
+  asr: '5:19 PM',
+  maghrib: '8:15 PM',
+  isha: '9:34 PM',
   qibla: 58.5,
+  iqama: {
+    fajr: '6:15 AM',
+    dhuhr: '2:00 PM',
+    asr: '6:30 PM',
+    maghrib: '+5 min',
+    isha: '10:00 PM',
+  },
+  jummah: ['2:00 PM', '2:30 PM'],
 };
 
 export default function Home() {
@@ -320,7 +371,7 @@ export default function Home() {
                 <li>Turn off mobile devices during prayers</li>
               </ul>
               <p className="mt-3">
-                <strong>Jummah Prayer:</strong> Fridays at 1:15 PM - Arrive early for the best experience.
+                <strong>Jummah Prayer:</strong> Fridays at 2:00 PM & 2:30 PM - Arrive early for the best experience.
               </p>
             </div>
           </section>

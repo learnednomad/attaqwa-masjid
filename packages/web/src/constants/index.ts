@@ -1,9 +1,14 @@
 export const MOSQUE_INFO = {
   name: 'Masjid At-Taqwa',
-  address: 'Your Mosque Address',
-  phone: 'Your Phone Number',
-  email: 'info@attaqwa.org',
-  website: 'https://attaqwa.org',
+  address: '2674 Woodwin Rd, Doraville, GA 30360',
+  phone: '(678) 896-9257',
+  email: 'Mohammad30360@hotmail.com',
+  schoolEmail: 'Attaqwa.du@gmail.com',
+  website: 'https://masjidattaqwaatlanta.org',
+  social: {
+    facebook: 'https://www.facebook.com/MasjidAttaqwa2674WoodwinRd',
+    youtube: 'https://www.youtube.com/@MasjidAttaqwa2674'
+  }
 } as const;
 
 export const PRAYER_NAMES = {

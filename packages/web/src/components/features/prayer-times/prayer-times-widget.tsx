@@ -19,12 +19,42 @@ export function PrayerTimesWidget({
   currentPrayer
 }: PrayerTimesWidgetProps) {
   const prayers = [
-    { name: 'Fajr', time: prayerTimes.fajr, key: 'fajr' },
-    { name: 'Sunrise', time: prayerTimes.sunrise, key: 'sunrise', isShurooq: true },
-    { name: 'Dhuhr', time: prayerTimes.dhuhr, key: 'dhuhr' },
-    { name: 'Asr', time: prayerTimes.asr, key: 'asr' },
-    { name: 'Maghrib', time: prayerTimes.maghrib, key: 'maghrib' },
-    { name: 'Isha', time: prayerTimes.isha, key: 'isha' },
+    { 
+      name: 'Fajr', 
+      time: prayerTimes.fajr, 
+      iqama: prayerTimes.iqama?.fajr,
+      key: 'fajr' 
+    },
+    { 
+      name: 'Sunrise', 
+      time: prayerTimes.sunrise, 
+      key: 'sunrise', 
+      isShurooq: true 
+    },
+    { 
+      name: 'Dhuhr', 
+      time: prayerTimes.dhuhr, 
+      iqama: prayerTimes.iqama?.dhuhr,
+      key: 'dhuhr' 
+    },
+    { 
+      name: 'Asr', 
+      time: prayerTimes.asr, 
+      iqama: prayerTimes.iqama?.asr,
+      key: 'asr' 
+    },
+    { 
+      name: 'Maghrib', 
+      time: prayerTimes.maghrib, 
+      iqama: prayerTimes.iqama?.maghrib,
+      key: 'maghrib' 
+    },
+    { 
+      name: 'Isha', 
+      time: prayerTimes.isha, 
+      iqama: prayerTimes.iqama?.isha,
+      key: 'isha' 
+    },
   ];
 
   const formatDate = (dateString: string) => {
@@ -121,22 +151,66 @@ export function PrayerTimesWidget({
                     </Badge>
                   )}
                 </div>
-                <span 
-                  className={cn(
-                    'prayer-time text-lg font-bold',
-                    prayer.isShurooq 
-                      ? 'text-orange-700'
-                      : currentPrayer === prayer.key
-                      ? 'text-islamic-green-700'
-                      : 'text-gray-700'
-                  )}
-                >
-                  {prayer.time}
-                </span>
+                <div className="text-right">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-1">
+                    <span>Adhan</span>
+                    {prayer.iqama && <span>• Iqama</span>}
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span 
+                      className={cn(
+                        'prayer-time text-lg font-bold',
+                        prayer.isShurooq 
+                          ? 'text-orange-700'
+                          : currentPrayer === prayer.key
+                          ? 'text-islamic-green-700'
+                          : 'text-gray-700'
+                      )}
+                    >
+                      {prayer.time}
+                    </span>
+                    {prayer.iqama && (
+                      <>
+                        <span className="text-gray-400">•</span>
+                        <span 
+                          className={cn(
+                            'prayer-time text-lg font-bold',
+                            currentPrayer === prayer.key
+                              ? 'text-islamic-green-600'
+                              : 'text-islamic-green-700'
+                          )}
+                        >
+                          {prayer.iqama}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
               </div>
             </div>
           ))}
         </div>
+
+        {/* Jummah Prayer Times */}
+        {prayerTimes.jummah && prayerTimes.jummah.length > 0 && (
+          <>
+            <Separator />
+            <div className="rounded-lg bg-islamic-gold-50 border border-islamic-gold-200 p-3">
+              <div className="flex items-center justify-between">
+                <span className="font-semibold text-islamic-gold-800">
+                  Jumu'ah Prayer
+                </span>
+                <div className="flex items-center gap-2">
+                  {prayerTimes.jummah.map((time, index) => (
+                    <span key={index} className="prayer-time text-lg font-bold text-islamic-gold-700">
+                      {time}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         <Separator />
 

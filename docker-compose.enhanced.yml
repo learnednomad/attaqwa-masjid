@@ -1,0 +1,412 @@
+version: '3.8'
+
+# Enhanced Docker Compose for Brownfield Integration
+# Complete system with Islamic services fallback, monitoring, and mobile support
+
+services:
+  # PostgreSQL Database with Enhanced Configuration
+  postgres:
+    image: postgres:14-alpine
+    container_name: attaqwa-postgres-enhanced
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-attaqwa_db}
+      POSTGRES_USER: ${POSTGRES_USER:-attaqwa_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-attaqwa_secure_2024!}
+      POSTGRES_INITDB_ARGS: "--auth-host=scram-sha-256 --auth-local=scram-sha-256"
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_enhanced_data:/var/lib/postgresql/data
+      - ./packages/db/init:/docker-entrypoint-initdb.d
+      - ./packages/db/migrations:/docker-entrypoint-migrations.d
+      - ./docker/postgres/postgresql.enhanced.conf:/etc/postgresql/postgresql.conf:ro
+    networks:
+      - attaqwa-enhanced-network
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-attaqwa_user} -d ${POSTGRES_DB:-attaqwa_db}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.5'
+        reservations:
+          memory: 512M
+          cpus: '0.25'
+
+  # Redis Cache with Enhanced Islamic Data Caching
+  redis:
+    image: redis:7-alpine
+    container_name: attaqwa-redis-enhanced
+    ports:
+      - "${REDIS_PORT:-6379}:6379"
+    volumes:
+      - redis_enhanced_data:/data
+      - ./docker/redis/redis-enhanced.conf:/etc/redis/redis.conf:ro
+    networks:
+      - attaqwa-enhanced-network
+    restart: unless-stopped
+    command: redis-server /etc/redis/redis.conf --appendonly yes --requirepass ${REDIS_PASSWORD:-redis_secure_password_2024}
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_secure_password_2024}
+    healthcheck:
+      test: ['CMD', 'redis-cli', '--no-auth-warning', '-a', '${REDIS_PASSWORD:-redis_secure_password_2024}', 'ping']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '0.25'
+        reservations:
+          memory: 256M
+          cpus: '0.125'
+
+  # Enhanced API Backend with Islamic Services Fallback
+  api:
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile
+      target: ${NODE_ENV:-development}
+    container_name: attaqwa-api-enhanced
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      PORT: 3001
+      DATABASE_URL: postgresql://${POSTGRES_USER:-attaqwa_user}:${POSTGRES_PASSWORD:-attaqwa_secure_2024!}@postgres:5432/${POSTGRES_DB:-attaqwa_db}
+      REDIS_URL: redis://redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_secure_password_2024}
+      JWT_SECRET: ${JWT_SECRET:-your-super-secret-jwt-key-change-in-production}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:3000}
+      
+      # Islamic Services Configuration
+      PRAYER_ALADHAN_API_URL: ${PRAYER_ALADHAN_API_URL:-http://api.aladhan.com/v1}
+      PRAYER_ISLAMICFINDER_API_URL: ${PRAYER_ISLAMICFINDER_API_URL:-https://www.islamicfinder.us/index.php/api}
+      PRAYER_PRIMARY_API_TIMEOUT: ${PRAYER_PRIMARY_API_TIMEOUT:-5000}
+      PRAYER_SECONDARY_API_TIMEOUT: ${PRAYER_SECONDARY_API_TIMEOUT:-7000}
+      PRAYER_LOCAL_CALCULATION_METHOD: ${PRAYER_LOCAL_CALCULATION_METHOD:-MWL}
+      PRAYER_LOCAL_MADHAB: ${PRAYER_LOCAL_MADHAB:-Shafi}
+      
+      # Monitoring Configuration
+      PRAYER_MONITOR_INTERVAL: ${PRAYER_MONITOR_INTERVAL:-60000}
+      PRAYER_ALERT_RESPONSE_TIME: ${PRAYER_ALERT_RESPONSE_TIME:-5000}
+      PRAYER_ALERT_FAILURE_RATE: ${PRAYER_ALERT_FAILURE_RATE:-50}
+      PRAYER_ALERT_CONSECUTIVE_FAILURES: ${PRAYER_ALERT_CONSECUTIVE_FAILURES:-3}
+      PRAYER_WEBHOOK_URL: ${PRAYER_WEBHOOK_URL:-}
+      PRAYER_SLACK_WEBHOOK: ${PRAYER_SLACK_WEBHOOK:-}
+      PRAYER_ALERT_EMAILS: ${PRAYER_ALERT_EMAILS:-}
+      
+      # Rate Limiting & Security
+      RATE_LIMIT_WINDOW_MS: ${RATE_LIMIT_WINDOW_MS:-900000}
+      RATE_LIMIT_MAX_REQUESTS: ${RATE_LIMIT_MAX_REQUESTS:-100}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      
+      # Mobile Support
+      MOBILE_API_OPTIMIZATIONS: true
+      MOBILE_COMPRESSION_ENABLED: true
+      MOBILE_CACHE_TTL: 3600
+    ports:
+      - "3001:3001"
+      - "3002:3002"  # Additional port for monitoring
+    volumes:
+      - ./packages/api:/app/packages/api:delegated
+      - ./packages/shared:/app/packages/shared:delegated
+      - ./packages/db:/app/packages/db:delegated
+      - api_logs:/app/logs
+      - /app/node_modules
+      - /app/packages/api/node_modules
+    networks:
+      - attaqwa-enhanced-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3001/health']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.7'
+        reservations:
+          memory: 512M
+          cpus: '0.3'
+
+  # Enhanced Web Frontend
+  web:
+    build:
+      context: .
+      dockerfile: packages/web/Dockerfile
+      target: ${NODE_ENV:-development}
+    container_name: attaqwa-web-enhanced
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL:-http://localhost:3000}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+      NEXT_PUBLIC_ALADHAN_API_URL: ${NEXT_PUBLIC_ALADHAN_API_URL:-https://api.aladhan.com/v1}
+      NEXT_PUBLIC_ENABLE_MOBILE_APP: ${NEXT_PUBLIC_ENABLE_MOBILE_APP:-true}
+      NEXT_PUBLIC_ENABLE_EDUCATION_MODULE: ${NEXT_PUBLIC_ENABLE_EDUCATION_MODULE:-true}
+      NEXT_PUBLIC_ENABLE_DONATIONS: ${NEXT_PUBLIC_ENABLE_DONATIONS:-false}
+      NEXT_PUBLIC_DEFAULT_CITY: ${NEXT_PUBLIC_DEFAULT_CITY:-Toronto}
+      NEXT_PUBLIC_DEFAULT_COUNTRY: ${NEXT_PUBLIC_DEFAULT_COUNTRY:-Canada}
+      NEXT_PUBLIC_ISLAMIC_FEATURES_ENABLED: true
+      NEXT_PUBLIC_PRAYER_MONITORING_ENABLED: true
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./packages/web:/app/packages/web:delegated
+      - ./packages/shared:/app/packages/shared:delegated
+      - web_logs:/app/logs
+      - /app/node_modules
+      - /app/packages/web/node_modules
+      - /app/packages/web/.next
+    networks:
+      - attaqwa-enhanced-network
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost:3000']
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+          cpus: '0.7'
+        reservations:
+          memory: 512M
+          cpus: '0.3'
+
+  # Prayer Times Monitoring Service
+  prayer-monitor:
+    build:
+      context: .
+      dockerfile: packages/api/Dockerfile
+      target: ${NODE_ENV:-development}
+    container_name: attaqwa-prayer-monitor
+    environment:
+      NODE_ENV: ${NODE_ENV:-development}
+      DATABASE_URL: postgresql://${POSTGRES_USER:-attaqwa_user}:${POSTGRES_PASSWORD:-attaqwa_secure_2024!}@postgres:5432/${POSTGRES_DB:-attaqwa_db}
+      REDIS_URL: redis://redis:6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-redis_secure_password_2024}
+      
+      # Monitoring Configuration
+      PRAYER_MONITOR_INTERVAL: ${PRAYER_MONITOR_INTERVAL:-60000}
+      PRAYER_ALERT_RESPONSE_TIME: ${PRAYER_ALERT_RESPONSE_TIME:-5000}
+      PRAYER_ALERT_FAILURE_RATE: ${PRAYER_ALERT_FAILURE_RATE:-50}
+      PRAYER_ALERT_CONSECUTIVE_FAILURES: ${PRAYER_ALERT_CONSECUTIVE_FAILURES:-3}
+      PRAYER_WEBHOOK_URL: ${PRAYER_WEBHOOK_URL:-}
+      PRAYER_SLACK_WEBHOOK: ${PRAYER_SLACK_WEBHOOK:-}
+      PRAYER_ALERT_EMAILS: ${PRAYER_ALERT_EMAILS:-}
+    volumes:
+      - ./packages/api:/app/packages/api:delegated
+      - monitoring_logs:/app/logs
+    networks:
+      - attaqwa-enhanced-network
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    command: npx tsx src/scripts/prayer-times-monitor.ts start
+    healthcheck:
+      test: ['CMD', 'npx', 'tsx', 'src/scripts/prayer-times-monitor.ts', 'status']
+      interval: 60s
+      timeout: 30s
+      retries: 3
+      start_period: 30s
+
+  # Nginx Reverse Proxy with Enhanced Configuration
+  nginx:
+    image: nginx:alpine
+    container_name: attaqwa-nginx-enhanced
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./docker/nginx/nginx.enhanced.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/conf.d/enhanced.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/ssl:/etc/nginx/ssl:ro
+      - nginx_cache:/var/cache/nginx
+      - nginx_logs:/var/log/nginx
+    networks:
+      - attaqwa-enhanced-network
+    depends_on:
+      - web
+      - api
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'curl', '-f', 'http://localhost/health']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.25'
+        reservations:
+          memory: 128M
+          cpus: '0.1'
+
+  # Enhanced Database Administration
+  adminer:
+    image: adminer:latest
+    container_name: attaqwa-adminer-enhanced
+    ports:
+      - "${ADMINER_PORT:-8080}:8080"
+    environment:
+      ADMINER_DEFAULT_SERVER: postgres
+      ADMINER_DESIGN: pepa-linha-dark
+      ADMINER_PLUGINS: tables-filter tinymce
+    networks:
+      - attaqwa-enhanced-network
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    profiles:
+      - development
+      - monitoring
+
+  # Islamic Calendar Data Service (External API Cache)
+  islamic-calendar:
+    image: redis:7-alpine
+    container_name: attaqwa-islamic-calendar
+    ports:
+      - "6380:6379"
+    volumes:
+      - islamic_calendar_data:/data
+    networks:
+      - attaqwa-enhanced-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes --port 6379 --save 900 1 --save 300 10
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Log Aggregation for Islamic Services
+  loki:
+    image: grafana/loki:2.9.0
+    container_name: attaqwa-loki-enhanced
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./docker/loki/loki-enhanced.yml:/etc/loki/local-config.yaml:ro
+      - loki_enhanced_data:/loki
+    networks:
+      - attaqwa-enhanced-network
+    restart: unless-stopped
+    command: -config.file=/etc/loki/local-config.yaml
+    profiles:
+      - monitoring
+      - production
+
+  # Metrics Collection with Islamic Services Monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: attaqwa-prometheus-enhanced
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus-enhanced.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_enhanced_data:/prometheus
+    networks:
+      - attaqwa-enhanced-network
+    restart: unless-stopped
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+      - '--web.enable-admin-api'
+    profiles:
+      - monitoring
+      - production
+
+  # Enhanced Monitoring Dashboard
+  grafana:
+    image: grafana/grafana:latest
+    container_name: attaqwa-grafana-enhanced
+    ports:
+      - "3300:3000"
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-admin_change_this_password}
+      GF_INSTALL_PLUGINS: grafana-piechart-panel,grafana-worldmap-panel,grafana-clock-panel
+      GF_FEATURE_TOGGLES_ENABLE: publicDashboards
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/islamic-services-dashboard.json
+    volumes:
+      - grafana_enhanced_data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - ./docker/grafana/islamic-dashboards:/var/lib/grafana/islamic-dashboards:ro
+    networks:
+      - attaqwa-enhanced-network
+    depends_on:
+      - prometheus
+      - loki
+    restart: unless-stopped
+    profiles:
+      - monitoring
+      - production
+
+networks:
+  attaqwa-enhanced-network:
+    driver: bridge
+    name: attaqwa-enhanced-network
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  postgres_enhanced_data:
+    driver: local
+    name: attaqwa-postgres-enhanced-data
+  redis_enhanced_data:
+    driver: local
+    name: attaqwa-redis-enhanced-data
+  islamic_calendar_data:
+    driver: local
+    name: attaqwa-islamic-calendar-data
+  nginx_cache:
+    driver: local
+    name: attaqwa-nginx-cache-enhanced
+  nginx_logs:
+    driver: local
+    name: attaqwa-nginx-logs-enhanced
+  api_logs:
+    driver: local
+    name: attaqwa-api-logs-enhanced
+  web_logs:
+    driver: local
+    name: attaqwa-web-logs-enhanced
+  monitoring_logs:
+    driver: local
+    name: attaqwa-monitoring-logs
+  loki_enhanced_data:
+    driver: local
+    name: attaqwa-loki-enhanced-data
+  prometheus_enhanced_data:
+    driver: local
+    name: attaqwa-prometheus-enhanced-data
+  grafana_enhanced_data:
+    driver: local
+    name: attaqwa-grafana-enhanced-data

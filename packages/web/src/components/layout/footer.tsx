@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram, Building } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Youtube, Building } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 import { MOSQUE_INFO } from '@/constants';
 
@@ -18,9 +18,8 @@ const resources = [
 ];
 
 const socialLinks = [
-  { name: 'Facebook', href: '#', icon: Facebook },
-  { name: 'Twitter', href: '#', icon: Twitter },
-  { name: 'Instagram', href: '#', icon: Instagram },
+  { name: 'Facebook', href: MOSQUE_INFO.social.facebook, icon: Facebook },
+  { name: 'YouTube', href: MOSQUE_INFO.social.youtube, icon: Youtube },
 ];
 
 export function Footer() {

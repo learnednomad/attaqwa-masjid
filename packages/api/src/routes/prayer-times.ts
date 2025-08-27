@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import { z } from 'zod';
 import { cache } from 'hono/cache';
+import { islamicFallbackService } from '../lib/islamic-fallback-service';
 
 const prayerTimes = new Hono();
 
@@ -264,7 +265,7 @@ async function fetchPrayerTimesFromAladhan(
   }
 }
 
-// GET /api/prayer-times
+// GET /api/prayer-times - Enhanced with 5-layer fallback
 prayerTimes.get('/', 
   cache({
     cacheName: 'prayer-times',
@@ -278,14 +279,19 @@ prayerTimes.get('/',
     const calculationMethod = school || method;
     
     try {
-      const prayerData = await fetchPrayerTimesFromAladhan(
-        city, 
-        country, 
-        queryDate, 
-        calculationMethod,
+      // Use the 5-layer fallback service
+      const response = await islamicFallbackService.getPrayerTimes({
+        date: queryDate,
         latitude,
-        longitude
-      );
+        longitude,
+        method: calculationMethod
+      });
+      
+      if (!response.success) {
+        throw new Error(response.error || 'Prayer times service failed');
+      }
+      
+      const prayerData = response.data!;
       
       // Check if this is a mobile request and transform accordingly
       const userAgent = c.req.header('User-Agent') || '';
@@ -333,7 +339,10 @@ prayerTimes.get('/',
       return c.json({
         data: responseData,
         success: true,
-        cached: prayerData.isFromCache || false,
+        cached: response.data?.source === 'cache',
+        fallbackUsed: response.fallbackUsed || false,
+        source: response.data?.source || 'unknown',
+        responseTime: response.responseTime,
         timestamp: new Date().toISOString(),
         ...(isMobile && { _mobile: { optimized: true, version: '1.0', compatibility: 'mobile-optimized' } })
       }, 200, headers);
@@ -480,21 +489,22 @@ prayerTimes.get('/month',
   }
 );
 
-// GET /api/prayer-times/qibla
+// GET /api/prayer-times/qibla - Enhanced with fallback service
 prayerTimes.get('/qibla', 
   zValidator('query', qiblaSchema), 
   async (c) => {
     const { latitude, longitude } = c.req.valid('query');
     
     try {
-      const qiblaDirection = calculateQiblaDirection(latitude, longitude);
+      const qiblaData = await islamicFallbackService.getQiblaDirection({ latitude, longitude });
       
       return c.json({
         data: {
           latitude,
           longitude,
-          qiblaDirection: Math.round(qiblaDirection * 10) / 10,
-          compassBearing: Math.round(qiblaDirection),
+          qiblaDirection: Math.round(qiblaData.direction * 10) / 10,
+          compassBearing: Math.round(qiblaData.direction),
+          distanceToKaaba: Math.round(qiblaData.distance * 100) / 100,
           kaaba: {
             latitude: 21.4225,
             longitude: 39.8262
@@ -515,7 +525,7 @@ prayerTimes.get('/qibla',
   }
 );
 
-// GET /api/prayer-times/islamic-date
+// GET /api/prayer-times/islamic-date - Enhanced with fallback service
 prayerTimes.get('/islamic-date', 
   zValidator('query', islamicDateSchema), 
   async (c) => {
@@ -523,7 +533,7 @@ prayerTimes.get('/islamic-date',
     const queryDate = date ? new Date(date) : new Date();
     
     try {
-      const islamicDate = getIslamicDate(queryDate, adjustment);
+      const islamicDate = await islamicFallbackService.getIslamicDate(queryDate);
       
       return c.json({
         data: {
@@ -630,55 +640,43 @@ prayerTimes.get('/next-prayer',
   }
 );
 
-// Health check endpoint for prayer times service
+// Health check endpoint for prayer times service - Enhanced with fallback monitoring
 prayerTimes.get('/health', async (c) => {
-  const cacheSize = prayerTimesCache.size;
-  const testCity = 'Toronto';
-  const testCountry = 'Canada';
-  const testDate = new Date().toISOString().split('T')[0];
+  const systemStats = islamicFallbackService.getSystemStats();
+  const serviceHealth = islamicFallbackService.getServiceHealth();
   
-  try {
-    // Test API connectivity
-    const testResponse = await fetchPrayerTimesFromAladhan(testCity, testCountry, testDate, '2');
-    
-    return c.json({
-      status: 'healthy',
-      service: 'prayer-times',
-      cache: {
-        size: cacheSize,
-        ttl: `${CACHE_TTL / 1000 / 60} minutes`
-      },
-      externalApi: {
-        status: 'operational',
-        lastTested: new Date().toISOString()
-      },
-      features: [
-        'daily-prayer-times',
-        'weekly-prayer-times', 
-        'monthly-prayer-times',
-        'qibla-direction',
-        'islamic-calendar',
-        'next-prayer-calculation'
-      ],
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    return c.json({
-      status: 'degraded',
-      service: 'prayer-times',
-      cache: {
-        size: cacheSize,
-        ttl: `${CACHE_TTL / 1000 / 60} minutes`
-      },
-      externalApi: {
-        status: 'error',
-        error: error instanceof Error ? error.message : 'Unknown error',
-        lastTested: new Date().toISOString()
-      },
-      fallback: 'mock-data-available',
-      timestamp: new Date().toISOString()
-    }, 503);
-  }
+  const isHealthy = serviceHealth.some(service => service.healthy) || 
+                   systemStats.offlineSchedules > 0;
+  
+  const status = isHealthy ? 'healthy' : 'degraded';
+  const statusCode = isHealthy ? 200 : 503;
+  
+  return c.json({
+    status,
+    service: 'prayer-times-fallback-system',
+    systemStats,
+    serviceHealth,
+    fallbackLayers: [
+      'aladhan-api',
+      'islamicfinder-api',
+      'local-calculations',
+      'manual-overrides',
+      'offline-schedules'
+    ],
+    features: [
+      'daily-prayer-times',
+      'weekly-prayer-times', 
+      'monthly-prayer-times',
+      'qibla-direction',
+      'islamic-calendar',
+      'next-prayer-calculation',
+      '5-layer-fallback',
+      'manual-overrides',
+      'offline-support'
+    ],
+    uptime: `${Math.floor(systemStats.uptime / 60)} minutes`,
+    timestamp: new Date().toISOString()
+  }, statusCode);
 });
 
 export { prayerTimes as prayerTimeRoutes };
