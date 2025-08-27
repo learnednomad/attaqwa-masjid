@@ -38,7 +38,9 @@
       "Bash(docker compose:*)",
       "mcp__mcp-server-firecrawl__firecrawl_scrape",
       "mcp__filesystem__write_file",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "mcp__coolify__projects",
+      "mcp__coolify__deployments"
     ],
     "deny": [],
     "additionalDirectories": [
