@@ -6,20 +6,81 @@ const prisma = new PrismaClient();
 async function main() {
   console.log('🌱 Starting database seed...');
 
-  // Create admin user
-  const adminPassword = await bcrypt.hash('admin123', 12);
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@attaqwa.org' },
-    update: {},
-    create: {
-      email: 'admin@attaqwa.org',
-      password: adminPassword,
-      name: 'Admin User',
+  // Create test users with different roles
+  const testUsers = [
+    {
+      email: 'texminer8@gmail.com',
+      password: 'Pass1word',
+      name: 'System Administrator',
       role: 'ADMIN',
+      ageTier: 'ADULTS'
     },
-  });
+    {
+      email: 'admin@attaqwa.org',
+      password: 'admin123',
+      name: 'Masjid Administrator',
+      role: 'ADMIN',
+      ageTier: 'ADULTS'
+    },
+    {
+      email: 'moderator@attaqwa.org',
+      password: 'moderator123',
+      name: 'Community Moderator',
+      role: 'MODERATOR',
+      ageTier: 'ADULTS'
+    },
+    {
+      email: 'imam@attaqwa.org',
+      password: 'imam123',
+      name: 'Imam Mohammad Zahirul Islam',
+      role: 'MODERATOR',
+      ageTier: 'ADULTS'
+    },
+    {
+      email: 'user@attaqwa.org',
+      password: 'user123',
+      name: 'Community Member',
+      role: 'USER',
+      ageTier: 'ADULTS'
+    },
+    {
+      email: 'parent@attaqwa.org',
+      password: 'parent123',
+      name: 'Parent User',
+      role: 'USER',
+      ageTier: 'ADULTS'
+    },
+    {
+      email: 'student@attaqwa.org',
+      password: 'student123',
+      name: 'Young Student',
+      role: 'USER',
+      ageTier: 'YOUTH'
+    }
+  ];
 
-  console.log('✅ Created admin user:', admin.email);
+  console.log('👥 Creating test users with different roles...');
+  
+  const createdUsers = [];
+  for (const userData of testUsers) {
+    const hashedPassword = await bcrypt.hash(userData.password, 12);
+    const user = await prisma.user.upsert({
+      where: { email: userData.email },
+      update: {},
+      create: {
+        email: userData.email,
+        password: hashedPassword,
+        name: userData.name,
+        role: userData.role,
+        ageTier: userData.ageTier,
+      },
+    });
+    createdUsers.push(user);
+    console.log(`✅ Created ${userData.role} user: ${user.email}`);
+  }
+
+  // Get the admin user for announcements
+  const admin = createdUsers.find(user => user.email === 'texminer8@gmail.com')!;
 
   // Create sample announcements
   const announcement1 = await prisma.announcement.create({
@@ -97,9 +158,13 @@ async function main() {
   console.log('✅ Created prayer schedules');
 
   // Seed Islamic educational content using the working seeder
-  const { seedEducationContent } = await import('./education-content.js');
-  await seedEducationContent();
-  console.log('✅ Created comprehensive Islamic educational content');
+  try {
+    const { seedEducationContent } = await import('./education-content.js');
+    await seedEducationContent();
+    console.log('✅ Created comprehensive Islamic educational content');
+  } catch (error) {
+    console.log('⚠️ Skipped education content seeding due to module issues');
+  }
 
   console.log('🎉 Database seeding completed!');
 }

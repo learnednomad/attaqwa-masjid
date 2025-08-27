@@ -6,42 +6,44 @@
 export const RouteProtection = {
   // Public routes - no authentication required
   public: [
-    '/auth/login',
-    '/auth/register',
-    '/auth/forgot-password',
-    '/prayers/times',
-    '/prayers/qibla',
-    '/announcements/public',
-    '/events/public',
-    '/quran/structure',
-    '/quran/surah/:number', // Public but shows personalized data if authenticated
-    '/quran/qaris',
-    '/quran/audio/:surah/:ayah',
-    '/halaqah/upcoming', // Public but can be filtered if authenticated
-    '/halaqah/recordings/:sessionId', // Only public recordings shown
+    '/api/auth/login',
+    '/api/auth/register',
+    '/api/auth/forgot-password',
+    '/api/prayer-times',
+    '/api/prayer-times/qibla',
+    '/api/announcements/public',
+    '/api/events/public',
+    '/api/quran/structure',
+    '/api/quran/surah/:number', // Public but shows personalized data if authenticated
+    '/api/quran/qaris',
+    '/api/quran/audio/:surah/:ayah',
+    '/api/halaqah/upcoming', // Public but can be filtered if authenticated
+    '/api/halaqah/recordings/:sessionId', // Only public recordings shown
   ],
 
   // Authenticated user routes - any logged-in user
   authenticated: [
-    '/user/profile',
-    '/user/settings',
-    '/user/family',
-    '/education/content/age-appropriate',
-    '/education/progress',
-    '/education/enroll',
-    '/quran/progress',
-    '/quran/recording',
-    '/quran/overview',
-    '/quran/goals',
-    '/quran/session/start',
-    '/quran/session/:id/end',
-    '/halaqah/join/:sessionId',
-    '/halaqah/interact',
-    '/halaqah/feedback/:sessionId',
-    '/donations/create',
-    '/donations/history',
-    '/notifications/subscribe',
-    '/notifications/unsubscribe',
+    '/api/auth/me',
+    '/api/auth/logout',
+    '/api/user/profile',
+    '/api/user/settings',
+    '/api/user/family',
+    '/api/education/content/age-appropriate',
+    '/api/education/progress',
+    '/api/education/enroll',
+    '/api/quran/progress',
+    '/api/quran/recording',
+    '/api/quran/overview',
+    '/api/quran/goals',
+    '/api/quran/session/start',
+    '/api/quran/session/:id/end',
+    '/api/halaqah/join/:sessionId',
+    '/api/halaqah/interact',
+    '/api/halaqah/feedback/:sessionId',
+    '/api/donations/create',
+    '/api/donations/history',
+    '/api/notifications/subscribe',
+    '/api/notifications/unsubscribe',
   ],
 
   // Parent-only routes
@@ -109,13 +111,13 @@ export const RouteProtection = {
 
   // Rate-limited routes (requests per minute)
   rateLimited: {
-    '/auth/login': 5,
-    '/auth/register': 3,
-    '/auth/forgot-password': 3,
-    '/donations/create': 10,
-    '/teacher/media/upload': 5,
-    '/quran/recording': 10,
-    '/halaqah/create': 5,
+    '/api/auth/login': 5,
+    '/api/auth/register': 3,
+    '/api/auth/forgot-password': 3,
+    '/api/donations/create': 10,
+    '/api/teacher/media/upload': 5,
+    '/api/quran/recording': 10,
+    '/api/halaqah/create': 5,
   },
 
   // Routes requiring special validation
@@ -204,15 +206,21 @@ export function createRouteProtection() {
       return next();
     }
     
-    // Check if user is authenticated
-    const user = c.get('user') || c.get('jwtPayload');
-    if (!user) {
-      return c.json({ error: 'Authentication required' }, 401);
-    }
-    
-    // Check role requirements
+    // For authenticated routes, let the route-specific middleware handle auth
+    // This middleware only handles role-based protection after auth
     const requiredRoles = getRequiredRole(path);
     if (requiredRoles) {
+      // Import auth function dynamically to avoid circular dependency
+      const { getAuthUser } = await import('../lib/auth.js');
+      const user = await getAuthUser(c);
+      
+      if (!user) {
+        return c.json({ error: 'Authentication required' }, 401);
+      }
+      
+      // Set user in context for route handlers
+      c.set('user', user);
+      
       const userRole = user.role || 'user';
       if (!requiredRoles.includes(userRole)) {
         return c.json({ 
