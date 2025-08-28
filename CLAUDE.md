@@ -68,6 +68,28 @@ npm run test:watch   # Run tests in watch mode
 npm run test:coverage # Generate test coverage report
 ```
 
+### 🎨 Islamic Design Review & Quality Assurance
+The project follows comprehensive Islamic design principles and automated quality assurance workflows inspired by top-tier companies.
+
+```bash
+# Islamic Design Review Commands
+/design-review                   # Comprehensive UI/UX review with Islamic design principles
+@islamic-design-reviewer         # Specialized agent for Islamic design validation
+
+# Design System Validation
+npm run design:validate         # Validate Islamic design system compliance
+npm run design:accessibility    # Check Islamic accessibility standards (RTL, cultural)
+npm run design:icons            # Validate Islamic-appropriate iconography
+npm run design:colors           # Test Islamic color palette compliance
+```
+
+**Islamic Design Review Process:**
+1. **Cultural Sensitivity**: Ensure all UI elements respect Islamic values and American Muslim community needs
+2. **Prayer Time Integration**: Validate prayer time displays, Arabic text rendering, and Qibla direction accuracy
+3. **Educational Content**: Review age-tier filtering, Islamic content categorization, and learning progress tracking
+4. **Accessibility**: Test RTL language support, elder-friendly interfaces, and family-safe content controls
+5. **Community Features**: Validate Islamic calendar integration, Zakat calculations, and community engagement elements
+
 ## Architecture Overview
 
 ### Tech Stack

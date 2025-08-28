@@ -40,7 +40,17 @@
       "mcp__filesystem__write_file",
       "Bash(git log:*)",
       "mcp__coolify__projects",
-      "mcp__coolify__deployments"
+      "mcp__coolify__deployments",
+      "Bash(claude mcp:*)",
+      "mcp__playwright__browser_close",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_navigate",
+      "mcp__exa__web_search_exa",
+      "mcp__playwright__browser_resize",
+      "Bash(npx bmad-method@stable:*)",
+      "Bash(git clone:*)"
     ],
     "deny": [],
     "additionalDirectories": [
