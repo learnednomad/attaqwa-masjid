@@ -1,0 +1,239 @@
+# BMAD-METHOD Expansion Packs Integration Configuration
+# Attaqwa Masjid Digital Ecosystem - Islamic Community Platform
+# Combines Infrastructure DevOps Pack + Creative Writing Pack
+
+project:
+  name: "Attaqwa Masjid Digital Ecosystem"
+  type: "Islamic Community Platform"
+  architecture: "Brownfield Integration"
+  technology_stack: "Next.js 15, Hono.js, PostgreSQL, Redis, Docker"
+
+# Expansion Packs Configuration
+expansion_packs:
+  infrastructure_devops:
+    path: ".bmad-infrastructure-devops"
+    version: "1.12.0"
+    customizations:
+      - "islamic-infrastructure-architecture-tmpl.yaml"
+      - "islamic-devops-platform.md"
+    integration_points:
+      - "existing_docker_infrastructure"
+      - "postgresql_islamic_schema"
+      - "redis_prayer_times_cache"
+      - "monitoring_islamic_services"
+
+  creative_writing:
+    path: ".bmad-creative-writing"  
+    version: "1.1.1"
+    customizations:
+      - "islamic-story-architect.md"
+      - "islamic-story-outline-tmpl.yaml"
+    integration_points:
+      - "islamic_educational_content"
+      - "community_storytelling"
+      - "arabic_content_processing"
+      - "age_tier_content_filtering"
+
+# Hybrid Workflows
+hybrid_workflows:
+  islamic_content_pipeline:
+    name: "Islamic Community Content Pipeline"
+    path: ".bmad-creative-writing/workflows/islamic-community-content-pipeline.yaml"
+    description: "End-to-end Islamic content creation to infrastructure deployment"
+    phases: ["planning", "creation", "infrastructure", "deployment", "feedback"]
+
+# Project-Specific Integration
+project_integration:
+  
+  # Existing Infrastructure Integration
+  brownfield_integration:
+    docker_compose:
+      enhanced_file: "docker-compose.enhanced.yml"
+      production_file: "docker-compose.prod.yml"
+      bmad_services:
+        - islamic_content_processor
+        - arabic_text_analyzer
+        - community_story_engine
+    
+    database_integration:
+      postgresql_extensions:
+        - islamic_calendar_functions
+        - arabic_text_search
+        - community_content_schema
+      redis_optimization:
+        - prayer_times_cache
+        - islamic_content_cache
+        - arabic_processing_cache
+    
+    monitoring_integration:
+      grafana_dashboards:
+        - islamic_services_dashboard
+        - community_engagement_metrics
+        - arabic_content_performance
+      prometheus_metrics:
+        - islamic_service_uptime
+        - prayer_times_accuracy
+        - community_content_usage
+
+  # Islamic Community Features
+  islamic_features:
+    prayer_times_integration:
+      bmad_workflow: "islamic-infrastructure-setup"
+      fallback_system: "5-layer prayer times reliability"
+      monitoring: "99.9% uptime requirement"
+    
+    educational_content:
+      bmad_workflow: "islamic-content-creation" 
+      age_tiers: ["PRESCHOOL", "ELEMENTARY", "MIDDLE_SCHOOL", "HIGH_SCHOOL", "COLLEGE", "ADULTS", "SENIORS"]
+      languages: ["English", "Arabic", "Bilingual"]
+    
+    community_management:
+      bmad_workflow: "community-content-pipeline"
+      features: ["family_accounts", "parental_controls", "community_guidelines"]
+      cultural_adaptation: "American Muslim context"
+
+# Agent Team Configuration
+agent_teams:
+  islamic_infrastructure_team:
+    lead: "islamic-devops-platform"
+    members:
+      - "infra-devops-platform" 
+      - "islamic-devops-platform"
+    responsibilities:
+      - "Halal-compliant infrastructure design"
+      - "Islamic services deployment"
+      - "Prayer times reliability"
+      - "Arabic content optimization"
+  
+  islamic_content_team:
+    lead: "islamic-story-architect"
+    members:
+      - "islamic-story-architect"
+      - "character-psychologist"
+      - "editor"
+      - "beta-reader"
+    responsibilities:
+      - "Islamic educational content creation"
+      - "Community storytelling"
+      - "Cultural authenticity validation"
+      - "Age-appropriate content development"
+  
+  hybrid_coordination_team:
+    lead: "bmad-orchestrator"
+    members:
+      - "islamic-devops-platform"
+      - "islamic-story-architect"
+      - "project-manager"
+    responsibilities:
+      - "Cross-pack workflow coordination"
+      - "Islamic compliance oversight"
+      - "Community impact measurement"
+      - "Integration quality assurance"
+
+# Quality Assurance Configuration
+quality_assurance:
+  islamic_compliance:
+    checklists:
+      - ".bmad-creative-writing/checklists/islamic-story-checklist.md"
+      - ".bmad-creative-writing/checklists/islamic-values-checklist.md"
+      - ".bmad-infrastructure-devops/checklists/islamic-infrastructure-checklist.md"
+    review_process:
+      - "Islamic scholar validation"
+      - "Community leader approval"
+      - "Family-safety verification"
+  
+  technical_quality:
+    infrastructure_validation:
+      - "infrastructure-checklist.md"
+      - "security and compliance validation"
+      - "performance optimization verification"
+    content_quality:
+      - "plot-structure-checklist.md adapted for Islamic content"
+      - "age-appropriate-checklist.md"
+      - "cultural-authenticity-checklist.md"
+
+# Deployment Configuration
+deployment:
+  environments:
+    development:
+      islamic_services: "development prayer times APIs"
+      content_validation: "relaxed for testing"
+      community_access: "development team only"
+    
+    staging:
+      islamic_services: "staging prayer times with fallback"
+      content_validation: "full Islamic compliance checks"
+      community_access: "beta testing community members"
+    
+    production:
+      islamic_services: "production 5-layer fallback system"
+      content_validation: "strict Islamic compliance enforcement"
+      community_access: "full Islamic community"
+      
+  monitoring:
+    islamic_metrics:
+      - "prayer_times_accuracy_percentage"
+      - "islamic_content_engagement_rate"
+      - "community_growth_metrics"
+      - "arabic_processing_performance"
+    
+    infrastructure_metrics:
+      - "service_uptime_99_9_percent"
+      - "database_performance_islamic_queries"
+      - "cache_efficiency_prayer_times"
+      - "scalability_ramadan_readiness"
+
+# Integration Testing
+testing_strategy:
+  unit_testing:
+    infrastructure: "Islamic services unit tests"
+    content: "Islamic story validation tests"
+  
+  integration_testing:
+    cross_pack: "Infrastructure + Content delivery integration"
+    community: "End-to-end Islamic community workflow testing"
+  
+  community_testing:
+    beta_testing: "Muslim community feedback integration"
+    cultural_validation: "Islamic authenticity verification"
+    family_testing: "Multi-generational usage testing"
+
+# Maintenance and Updates
+maintenance:
+  islamic_calendar_updates:
+    frequency: "Monthly Islamic calendar synchronization"
+    ramadan_preparation: "Annual infrastructure scaling preparation"
+    eid_content: "Seasonal Islamic holiday content updates"
+  
+  community_feedback_integration:
+    frequency: "Bi-weekly community feedback reviews"
+    content_iteration: "Monthly Islamic content improvements"
+    feature_requests: "Quarterly Islamic feature enhancement"
+  
+  infrastructure_updates:
+    bmad_pack_updates: "Follow BMAD-METHOD release cycle"
+    security_updates: "Monthly security patch integration"
+    performance_optimization: "Quarterly performance reviews"
+
+# Success Metrics and KPIs
+success_metrics:
+  islamic_community_impact:
+    target: "Strengthen Islamic community connections and knowledge"
+    metrics:
+      - "Muslim family adoption rate: >75%"
+      - "Islamic education effectiveness: measurable knowledge improvement"
+      - "Community engagement: >80% active participation"
+  
+  technical_excellence:
+    target: "World-class Islamic community platform"
+    metrics:
+      - "99.9% uptime for Islamic services"
+      - "Sub-2-second global content delivery"
+      - "Support 10x growth during Ramadan"
+  
+  content_quality:
+    target: "Authentic, engaging Islamic educational content"
+    metrics:
+      - "Islamic authenticity score: >95%"
+      - "Community satisfaction: >90%"
+      - "Educational value assessment: continuous improvement"

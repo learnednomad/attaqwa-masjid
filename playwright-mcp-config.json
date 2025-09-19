@@ -1,0 +1,24 @@
+{
+  "browser": {
+    "browserName": "chromium",
+    "launchOptions": {
+      "headless": false,
+      "channel": "chrome"
+    },
+    "contextOptions": {
+      "viewport": { "width": 1280, "height": 720 }
+    }
+  },
+  "capabilities": [
+    "vision",
+    "pdf",
+    "tabs",
+    "install"
+  ],
+  "outputDir": "./.playwright-mcp",
+  "imageResponses": "allow",
+  "network": {
+    "allowedOrigins": [],
+    "blockedOrigins": []
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "tech_stack": [
+    "TypeScript",
+    "Next.js 15",
+    "React 19",
+    "Node.js",
+    "Hono.js",
+    "PostgreSQL",
+    "Redis",
+    "Prisma ORM",
+    "Tailwind CSS",
+    "Docker",
+    "Turbo",
+    "Jest",
+    "Playwright"
+  ],
+  "features": [
+    {
+      "name": "Islamic Hero Slider",
+      "description": "Dynamic rotating hero section with Arabic calligraphy, Bismillah, and Islamic community messages with auto-play functionality",
+      "files": ["packages/web/src/app/page.tsx"]
+    },
+    {
+      "name": "Prayer Times Widget",
+      "description": "Enhanced prayer times display with clean mosque theme layout, Arabic text integration, live status indicators, and Qibla direction",
+      "files": ["packages/web/src/components/features/prayer-times/prayer-times-widget.tsx", "packages/web/src/components/features/prayer-times/PrayerTimeCard.tsx", "packages/web/src/components/features/prayer-times/QiblaCompass.tsx"]
+    },
+    {
+      "name": "Islamic Community Dashboard",
+      "description": "Comprehensive Islamic learning dashboard with age-tier content filtering, personalized learning plans, and progress tracking",
+      "files": ["packages/web/src/app/dashboard/page.tsx", "packages/web/src/components/features/dashboard/IslamicDashboard.tsx"]
+    },
+    {
+      "name": "Islamic Education System",
+      "description": "Age-based educational content filtering system with Quran memorization tracking, interactive quizzes, and Islamic calendar integration",
+      "files": ["packages/web/src/app/education/page.tsx", "packages/web/src/components/features/education/EducationContentCard.tsx", "packages/web/src/components/features/education/AgeTierFilter.tsx", "packages/web/src/components/features/education/InteractiveQuiz.tsx"]
+    },
+    {
+      "name": "Islamic Services API",
+      "description": "5-layer prayer times fallback system with Islamic calculations, prayer times admin functionality, and halal-compliant service architecture",
+      "files": ["packages/api/src/routes/prayer-times.ts", "packages/api/src/routes/prayer-times-admin.ts", "packages/api/src/lib/islamic-calculations.ts", "packages/api/src/lib/islamic-fallback-service.ts"]
+    },
+    {
+      "name": "Announcement Management",
+      "description": "Community announcements system with premium Islamic design, enhanced micro-interactions, and admin management interface",
+      "files": ["packages/web/src/components/features/announcements/announcement-card.tsx", "packages/web/src/app/announcements/page.tsx", "packages/api/src/routes/announcements.ts"]
+    },
+    {
+      "name": "Islamic Events System",
+      "description": "Event management with Eid celebrations, Ramadan programs, and community gathering coordination with Islamic calendar integration",
+      "files": ["packages/web/src/components/features/events/event-card.tsx", "packages/web/src/app/events/page.tsx", "packages/api/src/routes/events.ts"]
+    },
+    {
+      "name": "Authentication & Authorization",
+      "description": "JWT-based authentication with role-based access control (Admin/Moderator/User) and Islamic privacy principles",
+      "files": ["packages/api/src/middleware/auth.ts", "packages/api/src/lib/auth.ts", "packages/web/src/lib/hooks/useAuth.tsx"]
+    },
+    {
+      "name": "Islamic Design System",
+      "description": "Comprehensive Islamic design system with custom color palette (islamic-green, islamic-gold, islamic-navy), Arabic typography, and geometric patterns",
+      "files": ["packages/web/tailwind.config.ts", "packages/web/src/app/globals.css", "packages/web/src/lib/ui-utils.ts"]
+    },
+    {
+      "name": "Mobile Optimization",
+      "description": "Mobile-first responsive design with API compression, field selection optimization, and cross-platform compatibility",
+      "files": ["packages/api/src/middleware/mobile.ts", "packages/api/src/middleware/mobile-transformer.ts"]
+    },
+    {
+      "name": "Islamic Calendar Integration",
+      "description": "Hijri calendar integration with seasonal content delivery, Islamic event tracking, and educational calendar synchronization",
+      "files": ["packages/api/src/routes/islamic-education-calendar.ts", "packages/web/src/app/calendar/page.tsx"]
+    },
+    {
+      "name": "Monitoring & Analytics",
+      "description": "Comprehensive monitoring stack with Islamic services metrics, prayer times health monitoring, and performance analytics",
+      "files": ["packages/api/src/routes/monitoring.ts", "packages/web/src/components/monitoring/ErrorBoundary.tsx", "packages/web/src/lib/monitoring/client-logger.ts"]
+    },
+    {
+      "name": "SEO & Structured Data",
+      "description": "Islamic content SEO optimization with Arabic language support, structured data for prayer times and events, and multilingual sitemap generation",
+      "files": ["packages/web/src/lib/seo.ts", "packages/web/src/lib/arabic-seo.ts", "packages/web/src/lib/local-seo.ts", "packages/web/src/components/seo/StructuredData.tsx"]
+    },
+    {
+      "name": "Database Schema",
+      "description": "Islamic community platform database schema with educational content, prayer times, events, and user management tables",
+      "files": ["packages/db/schema.prisma", "packages/db/seed/education-content.ts", "packages/db/migrations/"]
+    },
+    {
+      "name": "UI Components Library",
+      "description": "Reusable UI components with Islamic design patterns, shadcn/ui integration, and accessibility compliance",
+      "files": ["packages/web/src/components/ui/badge.tsx", "packages/web/src/components/ui/button.tsx", "packages/web/src/components/ui/card.tsx", "packages/web/src/components/ui/modal.tsx"]
+    }
+  ]
+}

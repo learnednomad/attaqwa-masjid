@@ -1,0 +1,242 @@
+# <!-- Powered by BMAD™ Core - Islamic Infrastructure Template -->
+template:
+  id: islamic-infrastructure-architecture-template-v1
+  name: Islamic Infrastructure Architecture
+  version: 1.0
+  output:
+    format: markdown
+    filename: docs/islamic-infrastructure-architecture.md
+    title: "{{project_name}} Islamic Infrastructure Architecture"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+  custom_elicitation:
+    title: "Islamic Infrastructure Architecture Elicitation Actions"
+    sections:
+      - id: infrastructure-overview
+        options:
+          - "Halal-Compliant Cloud Provider Analysis - Evaluate cloud providers for Islamic compliance"
+          - "Prayer Times Service Infrastructure - Design high-availability Islamic services"
+          - "Islamic Content Delivery - Plan multilingual Arabic/English content distribution"
+          - "Community Scalability Planning - Design for Islamic community growth patterns"
+          - "Islamic Calendar Integration - Plan for Hijri calendar-based scaling"
+          - "Zakat & Financial Compliance - Review Islamic financial compliance requirements"
+          - "Proceed to next section"
+
+sections:
+  - id: initial-setup
+    instruction: |
+      Islamic Infrastructure Setup
+
+      1. Replace {{project_name}} with the actual Islamic project name throughout the document
+      2. Gather and review required inputs specific to Islamic community platforms:
+         - Product Requirements Document (PRD) - Islamic community needs and scale requirements
+         - Main System Architecture - Islamic services dependencies and brownfield integration
+         - Technical Preferences/Tech Stack Document - Docker, PostgreSQL, Redis stack
+         - Islamic Services Architecture - Prayer times, educational content, community features
+         - Existing Brownfield Documentation - Current infrastructure and monitoring setup
+
+      If any required documents are missing, ask user: "I need the following documents to create a comprehensive Islamic infrastructure architecture: [list missing]. Would you like to proceed with available information or provide the missing documents first?"
+
+      3. <critical_rule>Cross-reference with existing brownfield architecture to ensure Islamic services integration aligns with current Docker/PostgreSQL/Redis infrastructure.</critical_rule>
+
+      Output file location: `docs/islamic-infrastructure-architecture.md`
+
+  - id: islamic-infrastructure-overview
+    title: Islamic Infrastructure Overview
+    instruction: |
+      Review the Islamic community requirements and existing brownfield architecture. Analyze current Docker containerization, PostgreSQL database, Redis caching, and monitoring setup. Document Islamic-specific non-functional requirements (prayer times accuracy, multilingual support, community scalability).
+    elicit: true
+    custom_elicitation: infrastructure-overview
+    template: |
+      - Halal-Compliant Cloud Provider(s)
+      - Islamic Core Services & Resources
+      - Regional Islamic Community Architecture
+      - Multi-environment Strategy for Islamic Services
+      - Brownfield Integration Points
+    examples:
+      - |
+        - **Cloud Provider:** AWS (halal-compliant hosting), with Docker containerization for Islamic services
+        - **Islamic Core Services:** Prayer times APIs with 5-layer fallback, Islamic educational content delivery, community management
+        - **Regional Architecture:** Multi-region support for global Muslim communities with local prayer times
+        - **Multi-environment Strategy:** Development, Staging, Production with identical Islamic services patterns
+        - **Brownfield Integration:** Existing PostgreSQL/Redis infrastructure with Docker Compose orchestration
+
+  - id: islamic-iac
+    title: Islamic Infrastructure as Code (IaC)
+    instruction: Define IaC approach for Islamic services based on existing Docker setup and technical preferences. Consider team expertise with containerization, database management, and Islamic service monitoring.
+    template: |
+      - Docker Containerization Strategy
+      - Repository Structure for Islamic Services
+      - Database State Management (PostgreSQL)
+      - Islamic Services Dependency Management
+      - Prayer Times Service Orchestration
+
+      <critical_rule>All Islamic infrastructure must be defined as code. No manual Islamic service configuration in production environments.</critical_rule>
+
+  - id: islamic-environment-configuration
+    title: Islamic Environment Configuration
+    instruction: Design environment strategy supporting Islamic community development workflow while maintaining halal compliance and cost efficiency. Reference existing brownfield setup and Islamic service requirements.
+    template: |
+      - Islamic Environment Promotion Strategy
+      - Halal-Compliant Configuration Management
+      - Islamic Secret Management (API keys, prayer times)
+      - Islamic Feature Flag Integration (Ramadan modes, community features)
+    sections:
+      - id: islamic-environments
+        repeatable: true
+        title: "{{environment_name}} Islamic Environment"
+        template: |
+          - **Purpose:** {{islamic_environment_purpose}}
+          - **Islamic Resources:** {{islamic_environment_resources}}
+          - **Halal Access Control:** {{islamic_environment_access}}
+          - **Islamic Data Classification:** {{islamic_environment_data_class}}
+
+  - id: islamic-services-architecture
+    title: Islamic Services Architecture
+    instruction: |
+      Design Islamic-specific service topology considering prayer times accuracy, Arabic content delivery, and community compliance requirements.
+
+      Create Islamic services diagram showing:
+      - Prayer times service architecture with fallback systems
+      - Islamic educational content delivery
+      - Community management services
+      - Zakat calculation services
+      - Arabic/English content management
+    template: |
+      - Prayer Times Service Infrastructure
+      - Islamic Educational Content Delivery
+      - Community Management Services
+      - Arabic Content Processing
+      - Islamic Calendar Integration
+    sections:
+      - id: islamic-services-diagram
+        type: mermaid
+        mermaid_type: graph
+        template: |
+          graph TB
+              subgraph "Islamic Production Infrastructure"
+                  subgraph "Islamic API Layer"
+                      PrayerAPI[Prayer Times API - 5 Layer Fallback]
+                      EducationAPI[Islamic Education API]
+                      CommunityAPI[Community Management API]
+                  end
+                  subgraph "Islamic Data Layer"
+                      PostgresDB[(PostgreSQL - Islamic Data)]
+                      RedisCache[Redis - Prayer Times Cache]
+                  end
+                  subgraph "Islamic Services"
+                      ArabicProcessor[Arabic Text Processor]
+                      CalendarService[Islamic Calendar Service]
+                      ZakatCalculator[Zakat Calculator]
+                  end
+              end
+              Internet((Islamic Community)) --> PrayerAPI
+              Internet --> EducationAPI
+              Internet --> CommunityAPI
+              PrayerAPI --> PostgresDB
+              PrayerAPI --> RedisCache
+              EducationAPI --> PostgresDB
+              CommunityAPI --> PostgresDB
+
+  - id: islamic-data-resources
+    title: Islamic Data Resources
+    instruction: |
+      Design Islamic data infrastructure based on existing PostgreSQL/Redis setup. Consider Islamic data volumes, prayer times caching, Arabic content storage, and community data compliance.
+
+      Create Islamic data flow diagram showing:
+      - Islamic database topology with prayer times optimization
+      - Arabic content replication patterns
+      - Islamic educational content backup flows
+      - Community data migration paths
+    template: |
+      - Islamic Database Deployment Strategy
+      - Halal-Compliant Backup & Recovery
+      - Prayer Times Replication & Failover
+      - Islamic Content Data Migration Strategy
+
+  - id: islamic-security-architecture
+    title: Islamic Security Architecture
+    instruction: Implement Islamic-compliant security strategy. Consider halal hosting requirements, community data protection, and Islamic privacy principles.
+    template: |
+      - Halal-Compliant IAM & Authentication
+      - Islamic Community Network Security
+      - Arabic Content Data Encryption
+      - Islamic Compliance Controls
+      - Community Privacy Monitoring
+
+      <critical_rule>Apply Islamic privacy principles for all community data access controls. Document all Islamic compliance exceptions with religious justification.</critical_rule>
+
+  - id: islamic-monitoring-observability
+    title: Islamic Services Monitoring & Observability
+    instruction: Design comprehensive Islamic services observability covering prayer times accuracy, Islamic content delivery, and community engagement KPIs.
+    template: |
+      - Prayer Times Accuracy Metrics
+      - Islamic Content Delivery Monitoring
+      - Community Engagement Tracking
+      - Arabic Content Performance Monitoring
+      - Islamic Services Alerting & Response
+
+  - id: islamic-disaster-recovery
+    title: Islamic Services Disaster Recovery
+    instruction: Design DR strategy for Islamic community services. Define clear RTO/RPO targets for prayer times, educational content, and community features.
+    template: |
+      - Islamic Services Backup Strategy
+      - Prayer Times Recovery Procedures
+      - Islamic Content Recovery Plans
+      - Community Data RTO & RPO Targets
+      - Islamic Services DR Testing
+
+      <critical_rule>Islamic DR procedures must be tested before Ramadan and major Islamic holidays. Document test results and community impact mitigation.</critical_rule>
+
+  - id: islamic-brownfield-integration
+    title: Brownfield Islamic Infrastructure Integration
+    instruction: Design integration with existing Docker/PostgreSQL/Redis infrastructure while adding Islamic services capabilities.
+    sections:
+      - id: existing-infrastructure-mapping
+        title: Existing Infrastructure Mapping
+        template: |
+          - Current Docker Compose orchestration integration
+          - PostgreSQL database schema extensions for Islamic data
+          - Redis caching optimization for prayer times
+          - Existing monitoring integration (Grafana/Prometheus)
+      - id: islamic-services-integration
+        title: Islamic Services Integration
+        template: |
+          - Prayer times API integration with existing API layer
+          - Islamic educational content delivery through existing CDN
+          - Community features integration with existing user management
+          - Arabic content processing pipeline integration
+
+  - id: islamic-implementation-handoff
+    title: Islamic Implementation Handoff
+    instruction: Create structured handoff documentation for Islamic services implementation team.
+    sections:
+      - id: islamic-adrs
+        title: Islamic Architecture Decision Records (ADRs)
+        content: |
+          Create ADRs for key Islamic infrastructure decisions:
+
+          - Halal-compliant cloud provider selection rationale
+          - Islamic services container orchestration
+          - Prayer times caching strategy
+          - Arabic content delivery architecture
+          - Islamic community data protection choices
+      - id: islamic-knowledge-transfer
+        title: Islamic Services Knowledge Transfer
+        template: |
+          - Islamic services technical documentation for operations team
+          - Prayer times accuracy runbook creation requirements
+          - Islamic community management training needs
+          - Arabic content processing handoff agenda items
+
+  - id: islamic-final-review
+    instruction: Final Islamic Infrastructure Review - Ensure all Islamic services sections are complete and consistent with brownfield integration. Verify halal compliance review was conducted and all Islamic requirements addressed.
+    content: |
+      ---
+
+      _Islamic Infrastructure Document Version: 1.0_
+      _Last Updated: {{current_date}}_
+      _Next Islamic Services Review: {{review_date}}_
+      _Ramadan Preparation Review: {{ramadan_date}}_

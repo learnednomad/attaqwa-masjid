@@ -348,3 +348,4 @@ Access monitoring at:
 - **Cache Management**: Redis Islamic services cache optimization
 - **Health Monitoring**: Automated prayer times API health checks
 - **Security Updates**: Regular dependency updates and vulnerability scanning
+- for every ui change use test sprite and playwright for iterative feedback

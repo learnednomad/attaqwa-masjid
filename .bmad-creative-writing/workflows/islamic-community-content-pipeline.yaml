@@ -1,0 +1,213 @@
+# Islamic Community Content Pipeline - Hybrid Infrastructure & Creative Writing Workflow
+# Combines BMAD Infrastructure DevOps and Creative Writing packs for Islamic content delivery
+
+workflow:
+  name: "Islamic Community Content Pipeline"
+  version: "1.0"
+  description: "End-to-end workflow from Islamic content creation to deployment on community platform"
+  
+  # Integration points between creative writing and infrastructure
+  integration_points:
+    - content_creation_to_infrastructure
+    - infrastructure_to_content_delivery
+    - community_feedback_to_content_iteration
+    - scaling_for_islamic_holidays
+
+phases:
+  - id: "islamic_content_planning"
+    name: "Islamic Content Planning Phase"
+    agents:
+      primary: "islamic-story-architect"
+      supporting: ["character-psychologist", "islamic-devops-platform"]
+    
+    steps:
+      - name: "Islamic Content Strategy"
+        agent: "islamic-story-architect"
+        action: "create-islamic-outline"
+        template: "islamic-story-outline-tmpl.yaml"
+        output: "content-strategy.md"
+        
+      - name: "Community Audience Analysis"
+        agent: "character-psychologist" 
+        action: "create-character-profile"
+        focus: "Muslim community personas"
+        output: "muslim-audience-profiles.md"
+        
+      - name: "Content Infrastructure Requirements"
+        agent: "islamic-devops-platform"
+        action: "review-content-infrastructure"
+        input: "content-strategy.md"
+        output: "content-infrastructure-requirements.md"
+
+  - id: "islamic_content_creation"
+    name: "Islamic Content Creation Phase"
+    agents:
+      primary: "islamic-story-architect"
+      supporting: ["editor", "dialog-specialist", "beta-reader"]
+    
+    steps:
+      - name: "Islamic Educational Content Development"
+        agent: "islamic-story-architect"
+        action: "create-prophetic-story"
+        template: "prophetic-story-tmpl.yaml"
+        validation: "islamic-story-checklist.md"
+        
+      - name: "Arabic Content Integration"
+        agent: "dialog-specialist"
+        action: "integrate-arabic-dialogue"
+        focus: "Authentic Islamic terminology and expressions"
+        
+      - name: "Content Quality Review"
+        agent: "editor"
+        action: "islamic-content-review"
+        checklist: "islamic-values-checklist.md"
+        
+      - name: "Community Beta Testing"
+        agent: "beta-reader"
+        action: "muslim-community-feedback"
+        target: "Muslim families and educators"
+
+  - id: "content_infrastructure_setup"
+    name: "Content Infrastructure Setup Phase"
+    agents:
+      primary: "islamic-devops-platform"
+      supporting: ["infra-devops-platform"]
+    
+    steps:
+      - name: "Arabic Content Processing Infrastructure"
+        agent: "islamic-devops-platform"
+        action: "setup-arabic-content-infrastructure"
+        template: "islamic-services-deployment-tmpl.yaml"
+        integration: "existing_postgresql_redis_setup"
+        
+      - name: "Islamic Content Delivery Network"
+        agent: "islamic-devops-platform" 
+        action: "create-islamic-doc"
+        template: "islamic-infrastructure-architecture-tmpl.yaml"
+        focus: "Multilingual content delivery optimization"
+        
+      - name: "Community Scaling Infrastructure"
+        agent: "infra-devops-platform"
+        action: "validate-infrastructure"
+        checklist: "infrastructure-checklist.md"
+        customization: "Islamic community growth patterns"
+
+  - id: "deployment_and_delivery"
+    name: "Deployment and Delivery Phase"
+    agents:
+      primary: "islamic-devops-platform"
+      supporting: ["islamic-story-architect"]
+    
+    steps:
+      - name: "Content Database Integration"
+        agent: "islamic-devops-platform"
+        action: "deploy-islamic-content"
+        target: "PostgreSQL with Islamic schema extensions"
+        caching: "Redis for Arabic content optimization"
+        
+      - name: "Islamic Content API Deployment" 
+        agent: "islamic-devops-platform"
+        action: "deploy-content-apis"
+        integration: "existing_docker_compose_stack"
+        monitoring: "Islamic content delivery metrics"
+        
+      - name: "Community Content Validation"
+        agent: "islamic-story-architect"
+        action: "validate-deployed-content"
+        checklist: "islamic-compliance-live-check"
+
+  - id: "community_feedback_and_iteration"
+    name: "Community Feedback and Iteration Phase"
+    agents:
+      primary: "beta-reader"
+      supporting: ["islamic-story-architect", "islamic-devops-platform"]
+    
+    steps:
+      - name: "Community Engagement Analytics"
+        agent: "islamic-devops-platform"
+        action: "analyze-community-metrics"
+        focus: "Islamic content engagement patterns"
+        
+      - name: "Islamic Educational Effectiveness"
+        agent: "beta-reader"
+        action: "assess-educational-impact"
+        metrics: "Islamic values reinforcement, community building"
+        
+      - name: "Content Iteration Planning"
+        agent: "islamic-story-architect"
+        action: "plan-content-improvements"
+        input: "community_feedback_analysis"
+        
+      - name: "Infrastructure Scaling Adjustments"
+        agent: "islamic-devops-platform"
+        action: "optimize-for-community-growth"
+        pattern: "Islamic holiday surge preparation"
+
+# Integration Configuration
+integration_config:
+  
+  # How creative writing output feeds into infrastructure
+  content_to_infrastructure:
+    content_files:
+      - "islamic-stories/*.md"
+      - "educational-content/*.md" 
+      - "community-content/*.md"
+    infrastructure_mapping:
+      - content_type: "islamic-educational"
+        database_schema: "islamic_education"
+        api_endpoints: "/api/education"
+        caching_strategy: "redis_islamic_content"
+      - content_type: "community-stories"
+        database_schema: "community_content"
+        api_endpoints: "/api/community/stories"
+        scaling_pattern: "ramadan_surge_ready"
+  
+  # How infrastructure supports content delivery
+  infrastructure_to_content:
+    arabic_processing:
+      - rtl_text_optimization: true
+      - arabic_search_indexing: true
+      - bilingual_content_routing: true
+    community_scaling:
+      - islamic_calendar_aware: true
+      - ramadan_traffic_patterns: true
+      - friday_prayer_scheduling: true
+    performance_optimization:
+      - prayer_times_caching: "high_priority"
+      - islamic_content_cdn: "arabic_optimized"
+      - community_engagement_metrics: "islamic_focused"
+
+# Special Islamic Considerations
+islamic_workflow_features:
+  
+  halal_compliance:
+    - content_review: "Islamic scholars validation"
+    - infrastructure: "Halal-compliant hosting verification"
+    - community_safety: "Family-safe content controls"
+  
+  islamic_calendar_integration:
+    - ramadan_preparation: "Infrastructure scaling for increased usage"
+    - eid_content_delivery: "Special Islamic holiday content"
+    - friday_optimization: "Jummah prayer time content delivery"
+  
+  community_building:
+    - family_engagement: "Multi-generational Islamic content"
+    - educational_pathways: "Age-appropriate Islamic learning"
+    - community_feedback: "Islamic community-driven improvements"
+
+# Success Metrics
+success_metrics:
+  content_quality:
+    - islamic_authenticity_score: ">95%"
+    - community_engagement_rate: ">80%"
+    - educational_effectiveness: "Measurable Islamic knowledge improvement"
+  
+  infrastructure_performance:
+    - islamic_content_delivery_speed: "<2s globally"
+    - arabic_processing_accuracy: ">99%"
+    - community_scaling_readiness: "Support 10x growth during Ramadan"
+  
+  community_impact:
+    - muslim_family_adoption: "75% of target demographic"
+    - islamic_education_enhancement: "Improved community Islamic knowledge"
+    - community_building_success: "Strengthened Islamic community connections"

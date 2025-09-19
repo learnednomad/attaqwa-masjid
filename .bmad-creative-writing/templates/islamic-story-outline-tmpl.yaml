@@ -1,0 +1,223 @@
+# <!-- Powered by BMAD™ Core - Islamic Story Outline Template -->
+template:
+  id: islamic-story-outline-template-v1
+  name: Islamic Story Outline
+  version: 1.0
+  output:
+    format: markdown
+    filename: stories/{{story_title}}-islamic-outline.md
+    title: "{{story_title}} - Islamic Story Outline"
+
+workflow:
+  mode: interactive
+  elicitation: advanced-elicitation
+  custom_elicitation:
+    title: "Islamic Story Development Actions"
+    sections:
+      - id: islamic-story-foundation
+        options:
+          - "Quranic Story Adaptation - Base story on Quranic narratives"
+          - "Prophetic Tradition Integration - Include authentic Hadith elements"
+          - "Islamic Historical Setting - Place story in Islamic historical context"
+          - "Contemporary Muslim Experience - Modern Islamic community stories"
+          - "Islamic Moral Lesson Focus - Center story around specific Islamic teaching"
+          - "Age-Appropriate Islamic Content - Adapt for specific Muslim age groups"
+          - "Proceed to story structure development"
+
+sections:
+  - id: initial-setup
+    instruction: |
+      Islamic Story Development Setup
+
+      1. Replace {{story_title}} with the Islamic story title throughout the document
+      2. Gather and review required inputs for Islamic storytelling:
+         - Islamic Source Material - Quran verses, authentic Hadith, or Islamic historical sources
+         - Target Muslim Audience - Age group and Islamic educational level
+         - Islamic Educational Objectives - What Islamic values or lessons to teach
+         - Cultural Context - Which Islamic cultural setting (Arab, Indo-Pak, Southeast Asian, etc.)
+         - Language Integration - How to incorporate Arabic terms and Islamic concepts
+
+      If any required Islamic elements are missing, ask user: "I need the following Islamic story elements: [list missing]. Would you like to proceed with available information or provide the missing Islamic context first?"
+
+      3. <critical_rule>Ensure all story elements align with Islamic teachings and values. No content should contradict Islamic principles or promote un-Islamic behavior.</critical_rule>
+
+      Output file location: `stories/{{story_title}}-islamic-outline.md`
+
+  - id: islamic-story-foundation
+    title: Islamic Story Foundation
+    instruction: |
+      Establish the Islamic foundation for your story. Identify the core Islamic teaching, historical context, or Quranic/Prophetic narrative that will serve as the backbone. Consider the target Muslim audience and their Islamic educational needs.
+    elicit: true
+    custom_elicitation: islamic-story-foundation
+    template: |
+      - **Islamic Source:** {{islamic_source}}
+      - **Core Islamic Teaching:** {{core_teaching}}
+      - **Target Muslim Audience:** {{target_audience}}
+      - **Cultural Context:** {{islamic_cultural_context}}
+      - **Educational Objective:** {{educational_objective}}
+    examples:
+      - |
+        - **Islamic Source:** Story of Prophet Yusuf (Joseph) from Surah Yusuf
+        - **Core Islamic Teaching:** Trust in Allah's plan and patience during trials
+        - **Target Muslim Audience:** Muslim youth ages 13-18
+        - **Cultural Context:** Contemporary American Muslim experience
+        - **Educational Objective:** Teaching Islamic patience (sabr) and trust in Allah (tawakkul)
+
+  - id: islamic-character-development
+    title: Islamic Character Development
+    instruction: Create Islamic characters that embody Islamic values and show moral growth throughout the story. Characters should be relatable to Muslim audiences while exemplifying Islamic principles.
+    template: |
+      - **Main Islamic Character:**
+        - Name: {{main_character_name}}
+        - Islamic Background: {{character_islamic_background}}
+        - Starting Islamic State: {{character_starting_state}}
+        - Islamic Growth Arc: {{character_islamic_growth}}
+        - Key Islamic Values: {{character_islamic_values}}
+      
+      - **Supporting Islamic Characters:**
+        - Islamic Mentor Figure: {{mentor_character}}
+        - Community Characters: {{community_characters}}
+        - Challenge/Test Characters: {{challenge_characters}}
+
+  - id: islamic-story-structure
+    title: Islamic Story Structure
+    instruction: |
+      Structure your Islamic story using traditional narrative elements while incorporating Islamic storytelling principles. Follow the pattern of Quranic narratives that often begin with context, present challenges, show character responses, and conclude with Islamic lessons.
+    template: |
+      - **Islamic Opening (Basmala/Context):**
+        - Setting Introduction: {{islamic_setting}}
+        - Character Introduction: {{character_intro}}
+        - Islamic World Building: {{islamic_world}}
+
+      - **Islamic Challenge/Test (Ibtila):**
+        - Nature of Test: {{islamic_test}}
+        - Character's Initial Response: {{initial_response}}
+        - Islamic Stakes: {{islamic_stakes}}
+
+      - **Islamic Journey/Growth:**
+        - Seeking Islamic Guidance: {{seeking_guidance}}
+        - Islamic Learning Process: {{learning_process}}
+        - Community Support: {{community_support}}
+        - Spiritual Development: {{spiritual_development}}
+
+      - **Islamic Resolution:**
+        - Islamic Solution: {{islamic_solution}}
+        - Character Transformation: {{character_transformation}}
+        - Community Impact: {{community_impact}}
+        - Islamic Lesson Learned: {{islamic_lesson}}
+
+  - id: islamic-themes-and-values
+    title: Islamic Themes and Values
+    instruction: Identify and develop the Islamic themes that will be woven throughout your story. These should be authentic Islamic values that strengthen Muslim identity and teach important life lessons.
+    template: |
+      - **Primary Islamic Theme:** {{primary_islamic_theme}}
+      - **Supporting Islamic Values:**
+        - Taqwa (God-consciousness): {{taqwa_element}}
+        - Sabr (Patience): {{sabr_element}}
+        - Tawakkul (Trust in Allah): {{tawakkul_element}}
+        - Rahma (Mercy/Compassion): {{rahma_element}}
+        - Adl (Justice): {{adl_element}}
+        - Husn al-Khuluq (Good Character): {{good_character_element}}
+      - **Islamic Life Lessons:** {{islamic_lessons}}
+      - **Community Values:** {{community_values}}
+
+  - id: islamic-cultural-elements
+    title: Islamic Cultural Elements
+    instruction: Integrate authentic Islamic cultural elements that will make the story resonate with Muslim audiences and accurately represent Islamic life.
+    template: |
+      - **Islamic Practices:**
+        - Salah (Prayer) Integration: {{salah_integration}}
+        - Islamic Calendar Events: {{islamic_calendar}}
+        - Islamic Dietary Laws: {{halal_elements}}
+        - Islamic Dress/Modesty: {{islamic_dress}}
+
+      - **Islamic Community Elements:**
+        - Masjid/Islamic Center: {{masjid_role}}
+        - Islamic Education: {{islamic_education}}
+        - Family Structure: {{islamic_family}}
+        - Community Support: {{community_support}}
+
+      - **Arabic/Islamic Terminology:**
+        - Key Arabic Terms: {{arabic_terms}}
+        - Quranic References: {{quran_references}}
+        - Islamic Expressions: {{islamic_expressions}}
+
+  - id: age-appropriate-considerations
+    title: Age-Appropriate Islamic Content
+    instruction: Ensure the story content is appropriate for the target Muslim age group while maintaining Islamic educational value.
+    template: |
+      - **Target Age Group:** {{target_age}}
+      - **Islamic Complexity Level:** {{islamic_complexity}}
+      - **Language Appropriateness:** {{language_level}}
+      - **Islamic Concept Introduction:** {{concept_introduction}}
+      - **Moral Complexity:** {{moral_complexity}}
+      - **Cultural Sensitivity:** {{cultural_sensitivity}}
+
+  - id: islamic-educational-integration
+    title: Islamic Educational Integration
+    instruction: Plan how the story will serve Islamic educational purposes and strengthen Muslim identity and knowledge.
+    template: |
+      - **Islamic Knowledge Integration:**
+        - Quranic Verses: {{quran_integration}}
+        - Prophetic Traditions: {{hadith_integration}}
+        - Islamic History: {{history_integration}}
+        - Islamic Sciences: {{islamic_sciences}}
+
+      - **Learning Outcomes:**
+        - Islamic Values Reinforcement: {{values_reinforcement}}
+        - Islamic Identity Strengthening: {{identity_strengthening}}
+        - Community Connection: {{community_connection}}
+        - Spiritual Development: {{spiritual_development}}
+
+  - id: islamic-story-validation
+    title: Islamic Story Validation
+    instruction: Ensure the story meets Islamic authenticity and educational standards.
+    sections:
+      - id: islamic-compliance-check
+        title: Islamic Compliance Verification
+        content: |
+          This Islamic story will be validated using comprehensive Islamic content standards:
+
+          - Alignment with Quran and authentic Sunnah
+          - Appropriateness for Muslim audiences
+          - Educational value for Islamic community
+          - Cultural sensitivity and accuracy
+          - Age-appropriate Islamic content
+          - Community building potential
+
+      - id: islamic-review-process
+        title: Islamic Review Process
+        content: |
+          The Islamic story should be reviewed by:
+
+          - Islamic scholars for religious accuracy
+          - Muslim educators for age-appropriateness
+          - Community members for cultural authenticity
+          - Parents for family-friendliness
+          - Target audience for engagement
+
+  - id: implementation-for-community
+    title: Implementation for Islamic Community
+    instruction: Plan how the story will be shared with and used by the Muslim community.
+    template: |
+      - **Community Distribution:**
+        - Masjid Story Time: {{masjid_storytelling}}
+        - Islamic School Integration: {{islamic_school_use}}
+        - Family Reading: {{family_reading}}
+        - Community Events: {{community_events}}
+
+      - **Islamic Educational Materials:**
+        - Discussion Questions: {{discussion_questions}}
+        - Islamic Activity Guides: {{activity_guides}}
+        - Moral Reflection Exercises: {{reflection_exercises}}
+        - Community Action Items: {{community_actions}}
+
+  - id: final-islamic-review
+    instruction: Final Islamic Story Review - Ensure all Islamic elements are authentic, educational, and appropriate. Verify Islamic compliance and community value.
+    content: |
+      ---
+
+      _Islamic Story Document Version: 1.0_
+      _Last Updated: {{current_date}}_
+      _Islamic Review Date: {{islamic_review_date}}_
+      _Community Implementation: {{community_implementation_date}}_

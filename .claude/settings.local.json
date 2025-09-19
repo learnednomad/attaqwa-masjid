@@ -50,7 +50,12 @@
       "mcp__exa__web_search_exa",
       "mcp__playwright__browser_resize",
       "Bash(npx bmad-method@stable:*)",
-      "Bash(git clone:*)"
+      "Bash(git clone:*)",
+      "mcp__testsprite__testsprite_generate_standardized_prd",
+      "mcp__playwright__browser_hover",
+      "mcp__playwright__browser_evaluate",
+      "mcp__testsprite__testsprite_generate_code_summary",
+      "mcp__testsprite__testsprite_generate_frontend_test_plan"
     ],
     "deny": [],
     "additionalDirectories": [

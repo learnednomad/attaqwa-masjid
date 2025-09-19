@@ -46,6 +46,12 @@ const PrayerTimesWidget = dynamic(() => import('@/components/features/prayer-tim
   )
 });
 
+// Islamic Services Grid - mosque theme inspired - static import for immediate rendering
+import { IslamicServicesGrid } from '@/components/features/islamic-services/islamic-services-grid';
+
+// Mosque Prayer Times Section - mosque theme inspired
+import { MosquePrayerTimesSection } from '@/components/features/prayer-times/mosque-prayer-times-section';
+
 
 // Real data from Masjid At-Taqwa website
 const mockAnnouncements: Announcement[] = [
@@ -297,7 +303,13 @@ export default function Home() {
 
       <div className="container mx-auto px-4 py-8">
         {/* Islamic Hero Slider Section - Mosque Theme Integration */}
-        <section className={`islamic-pattern rounded-xl sm:rounded-2xl bg-gradient-to-br ${heroSlides[currentSlide].backgroundGradient} p-6 sm:p-8 text-white md:p-12 lg:p-16 relative overflow-hidden shadow-xl sm:shadow-2xl shadow-islamic-green/15 sm:shadow-islamic-green/20 hover:shadow-3xl hover:shadow-islamic-green/35 hover:scale-[1.02] transition-all duration-1000 will-change-transform focus-within:ring-4 focus-within:ring-islamic-gold-400/50 focus-within:outline-none group/hero transform-gpu`} 
+        <section className={`islamic-pattern rounded-xl sm:rounded-2xl bg-gradient-to-br ${heroSlides[currentSlide].backgroundGradient} p-8 sm:p-12 text-white md:p-16 lg:p-20 xl:p-24 min-h-[70vh] sm:min-h-[75vh] md:min-h-[80vh] lg:min-h-[85vh] relative overflow-hidden shadow-xl sm:shadow-2xl shadow-islamic-green/15 sm:shadow-islamic-green/20 hover:shadow-3xl hover:shadow-islamic-green/35 hover:scale-[1.02] transition-all duration-1000 will-change-transform focus-within:ring-4 focus-within:ring-islamic-gold-400/50 focus-within:outline-none group/hero transform-gpu flex items-center justify-center`} 
+                 style={{
+                   backgroundImage: `linear-gradient(to bottom right, rgba(75, 85, 99, 0.6), rgba(75, 85, 99, 0.5), rgba(75, 85, 99, 0.6)), url('/alexander-psiuk-u7yUvVU-q9Y-unsplash.jpg')`,
+                   backgroundSize: 'cover',
+                   backgroundPosition: 'center',
+                   backgroundRepeat: 'no-repeat'
+                 }}
                  role="banner" 
                  aria-labelledby="hero-title" 
                  aria-describedby="hero-description"
@@ -368,133 +380,53 @@ export default function Home() {
 
           {/* Enhanced responsive container with dynamic content */}
           <div className="max-w-4xl relative z-10">
-            <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 mb-6 sm:mb-8">
-              {/* Mobile-optimized Islamic icon with advanced interactivity */}
-              <div className="relative group self-center sm:self-start transform-gpu">
-                <Moon className="h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 text-islamic-gold animate-pulse group-hover:scale-125 group-hover:rotate-12 transition-all duration-700 will-change-transform group-hover:text-islamic-gold-300 drop-shadow-lg group-hover:drop-shadow-2xl group-hover:drop-shadow-islamic-gold/50" />
-                
-                {/* Enhanced multi-layer ring animation */}
-                <div className="absolute inset-0 h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 bg-islamic-gold/25 rounded-full animate-ping"></div>
-                <div className="absolute inset-0 h-12 w-12 sm:h-14 sm:w-14 md:h-16 md:w-16 bg-islamic-gold/15 rounded-full animate-ping opacity-0 group-hover:opacity-100" style={{animationDelay: '200ms'}}></div>
-                
-                {/* Advanced gradient aura effect */}
-                <div className="absolute -inset-2 sm:-inset-3 bg-gradient-to-r from-islamic-gold/20 via-islamic-gold/10 to-transparent rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 blur-sm"></div>
-              </div>
-              
+            <div className="flex flex-col items-center text-center mb-6 sm:mb-8">
               {/* Dynamic content container based on current slide */}
-              <div className="flex-1 space-y-3 text-center sm:text-left">
+              <div className="flex-1 space-y-3 text-center">
                 {/* Arabic text with beautiful calligraphy */}
-                <div className="arabic text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-arabic leading-relaxed opacity-95 animate-fade-in mb-3" 
+                <div className="arabic text-5xl xs:text-6xl sm:text-7xl md:text-8xl lg:text-[8.5rem] xl:text-[10rem] 2xl:text-[12rem] font-arabic font-black leading-tight text-white opacity-95 animate-fade-in mb-6"
                      key={`arabic-${currentSlide}`}
                      style={{animationDelay: '0ms', direction: 'rtl'}}>
                   {heroSlides[currentSlide].arabicText}
                 </div>
                 
                 {/* English translation */}
-                <h1 id="hero-title" className="text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold animate-fade-in leading-tight tracking-wide opacity-90"
+                <h1 id="hero-title" className="hidden text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-black animate-fade-in leading-tight tracking-wide text-black opacity-95 mb-3"
                     key={`english-${currentSlide}`}
                     style={{animationDelay: '200ms'}}>
                   {heroSlides[currentSlide].englishText}
                 </h1>
                 
                 {/* Subtitle */}
-                <p className="text-sm xs:text-base sm:text-lg md:text-xl opacity-85 animate-fade-in leading-relaxed"
+                <p className="hidden text-lg xs:text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-black opacity-90 animate-fade-in leading-snug"
                    key={`subtitle-${currentSlide}`}
                    style={{animationDelay: '400ms'}}>
                   {heroSlides[currentSlide].subText}
                 </p>
                 
-                {/* Decorative Islamic pattern separator */}
-                <div className="flex justify-center sm:justify-start items-center gap-2 py-2 animate-fade-in" style={{animationDelay: '600ms'}}>
-                  <Sparkles className="h-4 w-4 text-islamic-gold-300 animate-pulse" />
-                  <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-islamic-gold-400 to-transparent"></div>
-                  <Sparkles className="h-4 w-4 text-islamic-gold-300 animate-pulse" />
-                </div>
               </div>
             </div>
             
             {/* Enhanced description section with Islamic community focus */}
-            <div id="hero-description" className="space-y-3 sm:space-y-4 animate-slide-up text-center sm:text-left" style={{animationDelay: '800ms'}} role="region" aria-labelledby="hero-title">
-              <p className="text-sm sm:text-base md:text-lg opacity-85 leading-relaxed font-normal">
+            <div id="hero-description" className="space-y-3 sm:space-y-4 animate-slide-up text-center" style={{animationDelay: '800ms'}} role="region" aria-labelledby="hero-title">
+              <p className="hidden text-lg sm:text-xl md:text-2xl lg:text-3xl text-black opacity-90 leading-relaxed font-semibold">
                 Join our welcoming Muslim community for <span className="font-semibold text-islamic-gold-200">daily prayers</span>, 
                 <span className="font-semibold text-islamic-gold-200"> Islamic education</span>, 
                 <span className="font-semibold text-islamic-gold-200"> community events</span>, and spiritual growth together.
               </p>
             </div>
             
-            {/* Enhanced mobile-first Premium action buttons with responsive grid */}
-            <nav className="grid grid-cols-1 xs:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 mt-6 sm:mt-8 animate-fade-in" 
-                 style={{animationDelay: '800ms'}} 
-                 role="navigation" 
-                 aria-label="Quick actions">
-              
-              {/* Mobile-optimized Prayer Times Button - Iteration 9 Advanced Interactions */}
-              <Link href="/prayer-times" aria-label="View today's prayer times schedule" className="group col-span-1 transform-gpu">
-                <Button size="lg" 
-                        variant="secondary" 
-                        className="w-full group/btn gap-2 xs:gap-3 bg-white/12 backdrop-blur-md border border-white/25 text-white hover:bg-white hover:text-islamic-green-700 hover:scale-110 hover:rotate-1 transition-all duration-700 hover:shadow-xl sm:hover:shadow-2xl hover:shadow-white/25 relative overflow-hidden min-h-[48px] xs:min-h-[52px] sm:min-h-[56px] font-medium tracking-wide will-change-transform text-sm xs:text-base transform-gpu">
-                  
-                  {/* Mobile-optimized shimmer effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 xs:via-white/25 to-transparent -skew-x-12 translate-x-[-100%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
-                  </div>
-                  
-                  {/* Mobile-responsive glow effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700">
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/8 xs:via-white/10 to-transparent blur-sm"></div>
-                  </div>
-                  
-                  <Clock className="h-4 w-4 xs:h-5 xs:w-5 group-hover/btn:animate-spin group-hover/btn:scale-125 relative z-10 transition-all duration-700 flex-shrink-0 group-hover/btn:text-islamic-green-600 drop-shadow-sm group-hover/btn:drop-shadow-lg" aria-hidden="true" />
-                  <span className="relative z-10 font-medium truncate group-hover/btn:font-bold group-hover/btn:tracking-wide transition-all duration-500">Prayer Times</span>
-                  <div className="ml-1 xs:ml-2 w-2 h-2 rounded-full bg-islamic-gold-400 animate-pulse group-hover/btn:bg-islamic-green-500 group-hover/btn:animate-bounce group-hover/btn:scale-150 transition-all duration-500 flex-shrink-0 group-hover/btn:shadow-lg group-hover/btn:shadow-islamic-green/50"></div>
-                </Button>
-              </Link>
-              
-              {/* Mobile-optimized Events Button - Iteration 9 Advanced Interactions */}
-              <Link href="/events" aria-label="Browse upcoming Islamic events and activities" className="group col-span-1 transform-gpu">
-                <Button size="lg" 
-                        variant="outline" 
-                        className="w-full group/btn gap-2 xs:gap-3 border-2 border-white/30 xs:border-white/35 bg-white/5 text-white hover:bg-white hover:text-islamic-green-700 backdrop-blur-md hover:scale-110 hover:-rotate-1 transition-all duration-700 hover:shadow-xl sm:hover:shadow-2xl hover:shadow-white/25 relative overflow-hidden min-h-[48px] xs:min-h-[52px] sm:min-h-[56px] font-medium tracking-wide will-change-transform text-sm xs:text-base transform-gpu">
-                  
-                  {/* Mobile-optimized shimmer effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-white/20 xs:via-white/25 to-transparent -skew-x-12 translate-x-[-100%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
-                  </div>
-                  
-                  {/* Mobile-responsive border glow */}
-                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500">
-                    <div className="absolute inset-0 border-2 border-white/35 xs:border-white/40 rounded-lg animate-pulse"></div>
-                  </div>
-                  
-                  <Calendar className="h-4 w-4 xs:h-5 xs:w-5 group-hover/btn:animate-bounce group-hover/btn:scale-125 relative z-10 transition-all duration-700 flex-shrink-0 group-hover/btn:text-islamic-green-600 drop-shadow-sm group-hover/btn:drop-shadow-lg group-hover/btn:rotate-6" aria-hidden="true" />
-                  <span className="relative z-10 font-medium truncate group-hover/btn:font-bold group-hover/btn:tracking-wide transition-all duration-500">Events</span>
-                  <div className="ml-1 xs:ml-2 w-2 h-2 rounded-full bg-islamic-navy-400 animate-pulse group-hover/btn:bg-islamic-gold-500 group-hover/btn:animate-bounce group-hover/btn:scale-150 transition-all duration-500 flex-shrink-0 group-hover/btn:shadow-lg group-hover/btn:shadow-islamic-gold/50"></div>
-                </Button>
-              </Link>
-              
-              {/* Mobile-optimized Learning Dashboard Button - Iteration 9 Advanced Interactions */}
-              <Link href="/dashboard" aria-label="Access your Islamic learning dashboard" className="group col-span-1 xs:col-span-2 lg:col-span-1 transform-gpu">
-                <Button size="lg" 
-                        variant="outline" 
-                        className="w-full group/btn gap-2 xs:gap-3 border-2 border-islamic-gold/35 xs:border-islamic-gold/40 bg-islamic-gold/6 xs:bg-islamic-gold/8 text-islamic-gold-100 hover:bg-islamic-gold hover:text-islamic-navy backdrop-blur-md hover:scale-105 hover:rotate-0.5 transition-all duration-700 hover:shadow-xl sm:hover:shadow-2xl hover:shadow-islamic-gold/30 xs:hover:shadow-islamic-gold/35 relative overflow-hidden min-h-[48px] xs:min-h-[52px] sm:min-h-[56px] font-medium tracking-wide will-change-transform text-sm xs:text-base transform-gpu">
-                  
-                  {/* Mobile-optimized Islamic gold shimmer */}
-                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-500">
-                    <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-r from-transparent via-islamic-gold/20 xs:via-islamic-gold/25 to-transparent -skew-x-12 translate-x-[-100%] group-hover/btn:translate-x-[200%] transition-transform duration-1000"></div>
-                  </div>
-                  
-                  {/* Mobile-responsive Islamic pattern overlay */}
-                  <div className="absolute inset-0 opacity-0 group-hover/btn:opacity-100 transition-opacity duration-700">
-                    <div className="absolute inset-0 bg-gradient-to-br from-islamic-gold/8 xs:from-islamic-gold/10 via-transparent to-islamic-gold/4 xs:to-islamic-gold/5"></div>
-                  </div>
-                  
-                  <BookOpen className="h-4 w-4 xs:h-5 xs:w-5 group-hover/btn:animate-bounce group-hover/btn:scale-125 relative z-10 transition-all duration-700 flex-shrink-0 group-hover/btn:text-islamic-navy-600 drop-shadow-sm group-hover/btn:drop-shadow-lg group-hover/btn:-rotate-3" aria-hidden="true" />
-                  <span className="relative z-10 font-medium truncate group-hover/btn:font-bold group-hover/btn:tracking-wide transition-all duration-500">Learning Dashboard</span>
-                  <div className="ml-1 xs:ml-2 w-2 h-2 rounded-full bg-islamic-gold-500 animate-pulse group-hover/btn:bg-islamic-navy-500 group-hover/btn:animate-bounce group-hover/btn:scale-150 transition-all duration-500 flex-shrink-0 group-hover/btn:shadow-lg group-hover/btn:shadow-islamic-navy/50"></div>
-                </Button>
-              </Link>
-            </nav>
           </div>
+        </section>
+
+        {/* Mosque Prayer Times Section - Above Services */}
+        <section className="mt-2 sm:mt-3 md:mt-4 animate-fade-in" style={{ animationDelay: '800ms' }}>
+          <MosquePrayerTimesSection location="Doraville, Georgia" />
+        </section>
+
+        {/* Islamic Services Grid Section - Mosque Theme Integration */}
+        <section className="mt-8 sm:mt-12 md:mt-16 animate-fade-in" style={{ animationDelay: '1000ms' }}>
+          <IslamicServicesGrid />
         </section>
 
       {/* Enhanced mobile-first responsive main content grid */}
@@ -718,7 +650,7 @@ export default function Home() {
           </section>
 
           {/* Calendar Downloads - Iteration 5 Enhancement: Advanced Micro-interactions */}
-          <section className="group relative" aria-labelledby="calendar-heading">
+          <section className="hidden group relative" aria-labelledby="calendar-heading">
             {/* Premium section background with Islamic navy patterns */}
             <div className="absolute inset-0 opacity-3 pointer-events-none">
               <div className="w-full h-full" style={{
