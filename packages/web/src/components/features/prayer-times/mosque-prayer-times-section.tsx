@@ -18,45 +18,45 @@ const prayerIcons = {
     <Image
       src="/prayer-icon1.png"
       alt="Fajr prayer icon"
-      width={24}
-      height={24}
-      className="w-6 h-6"
+      width={250}
+      height={250}
+      className="w-8 h-12 object-cover"
     />
   ),
   dhuhr: (
     <Image
       src="/prayer-icon2.png"
       alt="Dhuhr prayer icon"
-      width={24}
-      height={24}
-      className="w-6 h-6"
+      width={250}
+      height={250}
+      className="w-8 h-12 object-cover"
     />
   ),
   asr: (
     <Image
       src="/prayer-icon3.png"
       alt="Asr prayer icon"
-      width={24}
-      height={24}
-      className="w-6 h-6"
+      width={250}
+      height={250}
+      className="w-8 h-12 object-cover"
     />
   ),
   maghrib: (
     <Image
       src="/prayer-icon4.png"
       alt="Maghrib prayer icon"
-      width={24}
-      height={24}
-      className="w-6 h-6"
+      width={250}
+      height={250}
+      className="w-8 h-12 object-cover"
     />
   ),
   isha: (
     <Image
       src="/prayer-icon5.png"
       alt="Isha prayer icon"
-      width={24}
-      height={24}
-      className="w-6 h-6"
+      width={250}
+      height={250}
+      className="w-8 h-12 object-cover"
     />
   )
 };
@@ -127,7 +127,7 @@ export function MosquePrayerTimesSection({
                     <h3 className="text-xl lg:text-2xl font-bold text-white mb-3 leading-tight">
                       Join Our Community
                     </h3>
-                    <p className="text-white/90 text-sm leading-relaxed mb-4">
+                    <p className="text-black/90 text-sm leading-relaxed mb-4">
                       Join our welcoming Muslim community for daily prayers, Islamic education, community events, and spiritual growth together.
                     </p>
                     <Link 
