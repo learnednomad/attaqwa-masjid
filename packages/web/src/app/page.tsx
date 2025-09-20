@@ -971,25 +971,25 @@ export default function Home() {
               </div>
               
               <nav className="space-y-3" role="navigation" aria-label="Islamic learning resources">
-                <Link href="/education/quran" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-green-50 to-transparent border border-islamic-green/10 hover:border-islamic-green/30 hover:bg-islamic-green-100/50 hover:shadow-md hover:shadow-islamic-green/10 transition-all duration-300 group/link">
+                <Link href="/resources/quran-study" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-green-50 to-transparent border border-islamic-green/10 hover:border-islamic-green/30 hover:bg-islamic-green-100/50 hover:shadow-md hover:shadow-islamic-green/10 transition-all duration-300 group/link">
                   <span className="text-lg group-hover/link:animate-pulse">📖</span>
                   <span className="text-sm font-medium text-islamic-navy-700 group-hover/link:text-islamic-green-700">Quran Study & Tafsir</span>
                   <ArrowRight className="h-3 w-3 ml-auto text-islamic-green-600 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all duration-300" />
                 </Link>
                 
-                <Link href="/education/hadith" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-navy-50 to-transparent border border-islamic-navy/10 hover:border-islamic-navy/30 hover:bg-islamic-navy-100/50 hover:shadow-md hover:shadow-islamic-navy/10 transition-all duration-300 group/link">
+                <Link href="/resources/hadith-collections" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-navy-50 to-transparent border border-islamic-navy/10 hover:border-islamic-navy/30 hover:bg-islamic-navy-100/50 hover:shadow-md hover:shadow-islamic-navy/10 transition-all duration-300 group/link">
                   <span className="text-lg group-hover/link:animate-pulse">📚</span>
                   <span className="text-sm font-medium text-islamic-navy-700 group-hover/link:text-islamic-navy-800">Hadith Collections</span>
                   <ArrowRight className="h-3 w-3 ml-auto text-islamic-navy-600 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all duration-300" />
                 </Link>
                 
-                <Link href="/prayer-times/qibla" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-gold-50 to-transparent border border-islamic-gold/10 hover:border-islamic-gold/30 hover:bg-islamic-gold-100/50 hover:shadow-md hover:shadow-islamic-gold/10 transition-all duration-300 group/link">
+                <Link href="/resources/qibla-direction" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-gold-50 to-transparent border border-islamic-gold/10 hover:border-islamic-gold/30 hover:bg-islamic-gold-100/50 hover:shadow-md hover:shadow-islamic-gold/10 transition-all duration-300 group/link">
                   <span className="text-lg group-hover/link:animate-pulse">🧭</span>
                   <span className="text-sm font-medium text-islamic-navy-700 group-hover/link:text-islamic-gold-700">Qibla Direction</span>
                   <ArrowRight className="h-3 w-3 ml-auto text-islamic-gold-600 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all duration-300" />
                 </Link>
                 
-                <Link href="/calendar/hijri" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-green-50 to-transparent border border-islamic-green/10 hover:border-islamic-green/30 hover:bg-islamic-green-100/50 hover:shadow-md hover:shadow-islamic-green/10 transition-all duration-300 group/link">
+                <Link href="/resources/islamic-calendar" className="flex items-center gap-3 p-3 rounded-lg bg-gradient-to-r from-islamic-green-50 to-transparent border border-islamic-green/10 hover:border-islamic-green/30 hover:bg-islamic-green-100/50 hover:shadow-md hover:shadow-islamic-green/10 transition-all duration-300 group/link">
                   <span className="text-lg group-hover/link:animate-pulse">🗓️</span>
                   <span className="text-sm font-medium text-islamic-navy-700 group-hover/link:text-islamic-green-700">Islamic Calendar</span>
                   <ArrowRight className="h-3 w-3 ml-auto text-islamic-green-600 opacity-0 group-hover/link:opacity-100 group-hover/link:translate-x-1 transition-all duration-300" />

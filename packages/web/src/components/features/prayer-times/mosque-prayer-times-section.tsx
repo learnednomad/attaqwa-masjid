@@ -131,7 +131,7 @@ export function MosquePrayerTimesSection({
                       Join our welcoming Muslim community for daily prayers, Islamic education, community events, and spiritual growth together.
                     </p>
                     <Link 
-                      href="/community/join" 
+                      href="/contact" 
                       className="inline-flex items-center px-6 py-3 bg-white text-islamic-green-600 font-semibold rounded-lg hover:bg-islamic-gold-50 hover:text-islamic-navy-700 hover:shadow-md transition-all duration-300 group text-sm"
                     >
                       <span>Learn More</span>
