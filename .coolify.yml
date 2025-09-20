@@ -1,0 +1,94 @@
+# Coolify deployment configuration for Masjid At-Taqwa
+version: '1.0'
+
+services:
+  app:
+    build:
+      dockerfile: Dockerfile.coolify
+      context: .
+    environment:
+      # Database
+      DATABASE_URL: ${DATABASE_URL}
+      
+      # API Configuration
+      API_PORT: 3001
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      
+      # Web Configuration  
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:3001}
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET}
+      
+      # Islamic Services
+      PRAYER_TIMES_API_KEY: ${PRAYER_TIMES_API_KEY}
+      ISLAMIC_FINDER_API_KEY: ${ISLAMIC_FINDER_API_KEY}
+      QURAN_API_KEY: ${QURAN_API_KEY}
+      
+      # Redis Cache
+      REDIS_URL: ${REDIS_URL:-redis://localhost:6379}
+      
+      # Monitoring
+      ENABLE_MONITORING: ${ENABLE_MONITORING:-true}
+      GRAFANA_API_KEY: ${GRAFANA_API_KEY}
+      
+      # Features
+      ENABLE_ARABIC_CONTENT: true
+      ENABLE_PRAYER_NOTIFICATIONS: true
+      ENABLE_FAMILY_ACCOUNTS: true
+      ENABLE_RAMADAN_MODE: ${ENABLE_RAMADAN_MODE:-auto}
+      
+      # Migrations
+      RUN_MIGRATIONS: ${RUN_MIGRATIONS:-true}
+      
+    ports:
+      - "3000:3000"  # Web interface
+      - "3001:3001"  # API server
+    
+    health_check:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    
+    resources:
+      limits:
+        cpus: '2'
+        memory: 2G
+      reservations:
+        cpus: '0.5'
+        memory: 512M
+
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: attaqwa
+      POSTGRES_USER: ${POSTGRES_USER:-attaqwa}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    health_check:
+      test: ["CMD-SHELL", "pg_isready -U attaqwa"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    health_check:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
+  redis_data:

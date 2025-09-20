@@ -1,0 +1,68 @@
+# Optimized Dockerfile for Coolify - Web Service Only
+# Next.js 15 with standalone output for minimal image size
+
+FROM node:22-alpine AS base
+
+RUN apk add --no-cache libc6-compat
+
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+COPY packages/web/package.json ./packages/web/
+COPY packages/shared/package.json ./packages/shared/
+COPY turbo.json ./
+COPY tsconfig.json ./
+
+# Install dependencies
+RUN npm ci --frozen-lockfile
+
+# Copy source code
+COPY packages/web ./packages/web
+COPY packages/shared ./packages/shared
+
+# Build stage
+FROM base AS builder
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+# Enable standalone output for smaller production image
+ENV NEXT_OUTPUT_MODE=standalone
+
+# Build shared package first
+RUN npm run build --workspace=@attaqwa/shared
+
+# Build Next.js with standalone output
+RUN cd packages/web && npm run build
+
+# Production stage - Ultra slim
+FROM node:22-alpine AS production
+
+RUN apk add --no-cache dumb-init curl
+
+# Create non-root user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nextjs -u 1001
+
+WORKDIR /app
+
+# Copy standalone output (includes node_modules)
+COPY --from=builder --chown=nextjs:nodejs /app/packages/web/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/packages/web/.next/static ./packages/web/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/packages/web/public ./packages/web/public
+
+USER nextjs
+
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health || exit 1
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME=0.0.0.0
+ENV NEXT_TELEMETRY_DISABLED=1
+
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["node", "packages/web/server.js"]

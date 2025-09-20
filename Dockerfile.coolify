@@ -1,0 +1,101 @@
+# Unified Dockerfile for Coolify deployment
+# Builds both API and Web services for Masjid At-Taqwa platform
+
+FROM node:22-alpine AS base
+
+# Install dependencies for native modules
+RUN apk add --no-cache libc6-compat openssl
+
+# Set working directory
+WORKDIR /app
+
+# Copy package files
+COPY package.json package-lock.json* ./
+COPY packages/api/package.json ./packages/api/
+COPY packages/web/package.json ./packages/web/
+COPY packages/shared/package.json ./packages/shared/
+COPY packages/db/package.json ./packages/db/
+COPY turbo.json ./
+COPY tsconfig.json ./
+
+# Install all dependencies
+RUN npm ci --frozen-lockfile
+
+# Copy all source code
+COPY . .
+
+# Generate Prisma client
+RUN cd packages/db && npx prisma generate
+
+# Build stage
+FROM base AS builder
+
+ENV NODE_ENV=production
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Build all packages in order
+RUN npm run build --workspace=@attaqwa/shared
+RUN npm run build --workspace=@attaqwa/db
+RUN npm run build --workspace=@attaqwa/api
+RUN npm run build --workspace=@attaqwa/web
+
+# Production stage
+FROM node:22-alpine AS production
+
+# Install runtime dependencies
+RUN apk add --no-cache dumb-init curl supervisor
+
+# Create app user
+RUN addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
+
+WORKDIR /app
+
+# Copy package files
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/package-lock.json ./
+COPY --from=builder /app/turbo.json ./
+COPY --from=builder /app/packages ./packages
+
+# Install production dependencies only
+RUN npm ci --omit=dev --frozen-lockfile && \
+    npm cache clean --force
+
+# Copy built applications
+COPY --from=builder --chown=nodejs:nodejs /app/packages/api/dist ./packages/api/dist
+COPY --from=builder --chown=nodejs:nodejs /app/packages/web/.next ./packages/web/.next
+COPY --from=builder --chown=nodejs:nodejs /app/packages/web/public ./packages/web/public
+COPY --from=builder --chown=nodejs:nodejs /app/packages/shared/dist ./packages/shared/dist
+COPY --from=builder --chown=nodejs:nodejs /app/packages/db/node_modules/.prisma ./packages/db/node_modules/.prisma
+COPY --from=builder --chown=nodejs:nodejs /app/packages/db/prisma ./packages/db/prisma
+
+# Create necessary directories
+RUN mkdir -p /app/logs && chown -R nodejs:nodejs /app/logs
+
+# Copy supervisor configuration
+COPY --chown=nodejs:nodejs docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Copy startup script
+COPY --chown=nodejs:nodejs docker/start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
+# Switch to non-root user
+USER nodejs
+
+# Expose ports for both services
+EXPOSE 3000 3001
+
+# Health check (checks both services)
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:3000/api/health && curl -f http://localhost:3001/health || exit 1
+
+# Environment variables
+ENV NODE_ENV=production
+ENV PORT_WEB=3000
+ENV PORT_API=3001
+ENV HOSTNAME=0.0.0.0
+ENV NEXT_TELEMETRY_DISABLED=1
+
+# Start both services using supervisor
+ENTRYPOINT ["dumb-init", "--"]
+CMD ["/app/start.sh"]
