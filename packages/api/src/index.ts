@@ -23,6 +23,7 @@ import educationAgeFilteringRoutes from './routes/education-age-filtering.js';
 import islamicEducationCalendarRoutes from './routes/islamic-education-calendar.js';
 import quranMemorizationRoutes from './routes/quran-memorization.js';
 import halaqahSessionRoutes from './routes/halaqah-sessions.js';
+import seerahCourseRoutes from './routes/seerah-courses.js';
 
 const app = new Hono();
 
@@ -81,6 +82,7 @@ app.route('/api/education-age', educationAgeFilteringRoutes);
 app.route('/api/islamic-calendar', islamicEducationCalendarRoutes);
 app.route('/api/quran', quranMemorizationRoutes);
 app.route('/api/halaqah', halaqahSessionRoutes);
+app.route('/api/seerah', seerahCourseRoutes);
 app.route('/api/monitoring', monitoringRoutes);
 app.route('/api/notifications', notificationRoutes);
 app.route('/api/donations', donationRoutes);

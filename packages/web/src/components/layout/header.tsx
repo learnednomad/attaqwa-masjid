@@ -15,6 +15,16 @@ const navigation = [
   { name: 'Announcements', href: '/announcements' },
   { name: 'Calendar', href: '/calendar' },
   { name: 'Prayer Times', href: '/prayer-times' },
+  { 
+    name: 'Resources', 
+    href: '/resources',
+    submenu: [
+      { name: 'Quran Study', href: '/resources/quran-study' },
+      { name: 'Hadith Collections', href: '/resources/hadith-collections' },
+      { name: 'Qibla Direction', href: '/resources/qibla-direction' },
+      { name: 'Islamic Calendar', href: '/resources/islamic-calendar' },
+    ]
+  },
   { name: 'Contact', href: '/contact' },
 ];
 
